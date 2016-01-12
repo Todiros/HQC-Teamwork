@@ -1,1 +1,1 @@
-# HQC-Teamwork
+# Poker - High-Quality Code teamwork project.
