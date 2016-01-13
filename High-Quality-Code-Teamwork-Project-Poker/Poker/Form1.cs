@@ -13,30 +13,64 @@ using System.Runtime.InteropServices;
 
 namespace Poker
 {
-
     public partial class Form1 : Form
     {
         #region Variables
         ProgressBar asd = new ProgressBar();
-        public int Nm;
-        Panel pPanel = new Panel(); Panel b1Panel = new Panel(); Panel b2Panel = new Panel(); Panel b3Panel = new Panel();
-        Panel b4Panel = new Panel(); Panel b5Panel = new Panel();
-        int call = 500, foldedPlayers = 5;
+        private const int CARDS_COUNT = 17;
+
+        private int Nm;
+        private int call = 500;
+        private int foldedPlayers = 5;
+
+        Panel pPanel = new Panel();
+        Panel b1Panel = new Panel();
+        Panel b2Panel = new Panel();
+        Panel b3Panel = new Panel();
+        Panel b4Panel = new Panel();
+        Panel b5Panel = new Panel();
+        
         public int Chips = 10000, bot1Chips = 10000, bot2Chips = 10000, bot3Chips = 10000, bot4Chips = 10000, bot5Chips = 10000;
-        double type, rounds = 0, b1Power, b2Power, b3Power, b4Power, b5Power, pPower = 0, pType = -1, Raise = 0,
-        b1Type = -1, b2Type = -1, b3Type = -1, b4Type = -1, b5Type = -1;
+
+        private double type;
+        private double rounds = 0;
+        private double Raise = 0;
+
+        private double b1Power, b2Power, b3Power, b4Power, b5Power, pPower = 0;
+
+        double pType = -1, b1Type = -1, b2Type = -1, b3Type = -1, b4Type = -1, b5Type = -1;
+
         bool B1turn = false, B2turn = false, B3turn = false, B4turn = false, B5turn = false;
+
         bool B1Fturn = false, B2Fturn = false, B3Fturn = false, B4Fturn = false, B5Fturn = false;
+        
         bool pFolded, b1Folded, b2Folded, b3Folded, b4Folded, b5Folded, intsadded, changed;
-        int pCall = 0, b1Call = 0, b2Call = 0, b3Call = 0, b4Call = 0, b5Call = 0, pRaise = 0, b1Raise = 0, b2Raise = 0, b3Raise = 0, b4Raise = 0, b5Raise = 0;
+
+        private int pCall = 0, b1Call = 0, b2Call = 0, b3Call = 0, b4Call = 0, b5Call = 0;
+
+        int pRaise = 0, b1Raise = 0, b2Raise = 0, b3Raise = 0, b4Raise = 0, b5Raise = 0;
+
         int height, width, winners = 0, Flop = 1, Turn = 2, River = 3, End = 4, maxLeft = 6;
+
         int last = 123, raisedTurn = 1;
+
         List<bool?> bools = new List<bool?>();
+
         List<Type> Win = new List<Type>();
+
         List<string> CheckWinners = new List<string>();
+
         List<int> ints = new List<int>();
+
         bool PFturn = false, Pturn = true, restart = false, raising = false;
+
         Poker.Type sorted;
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
         string[] ImgLocation = Directory.GetFiles("Assets\\Cards", "*.png", SearchOption.TopDirectoryOnly);
         /*string[] ImgLocation ={
                    "Assets\\Cards\\33.png","Assets\\Cards\\22.png",
@@ -111,6 +145,7 @@ namespace Poker
             Bitmap backImage = new Bitmap("Assets\\Back\\Back.png");
             int horizontal = 580, vertical = 480;
             Random r = new Random();
+
             for (i = ImgLocation.Length; i > 0; i--)
             {
                 int j = r.Next(i);
@@ -118,7 +153,8 @@ namespace Poker
                 ImgLocation[j] = ImgLocation[i - 1];
                 ImgLocation[i - 1] = k;
             }
-            for (i = 0; i < 17; i++)
+
+            for (i = 0; i < CARDS_COUNT; i++)
             {
 
                 Deck[i] = Image.FromFile(ImgLocation[i]);
