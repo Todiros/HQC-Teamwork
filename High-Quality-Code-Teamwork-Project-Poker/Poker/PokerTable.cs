@@ -3025,15 +3025,15 @@ namespace Poker
         }
         private void bAdd_Click(object sender, EventArgs e)
         {
-            if (tbAdd.Text == "") { }
+            if (this.textBoxAdd.Text == "") { }
             else
             {
-                this.playerChips += int.Parse(tbAdd.Text);
-                this.firstBotChips += int.Parse(tbAdd.Text);
-                this.secondBotChips += int.Parse(tbAdd.Text);
-                this.thirdBotChips += int.Parse(tbAdd.Text);
-                this.forthBotChips += int.Parse(tbAdd.Text);
-                this.fifthBotChips += int.Parse(tbAdd.Text);
+                this.playerChips += int.Parse(this.textBoxAdd.Text);
+                this.firstBotChips += int.Parse(this.textBoxAdd.Text);
+                this.secondBotChips += int.Parse(this.textBoxAdd.Text);
+                this.thirdBotChips += int.Parse(this.textBoxAdd.Text);
+                this.forthBotChips += int.Parse(this.textBoxAdd.Text);
+                this.fifthBotChips += int.Parse(this.textBoxAdd.Text);
             }
             this.textBoxChips.Text = "playerChips : " + this.playerChips.ToString();
         }

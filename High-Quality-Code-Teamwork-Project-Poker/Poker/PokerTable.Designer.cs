@@ -35,7 +35,7 @@
             this.pbTimer = new System.Windows.Forms.ProgressBar();
             this.textBoxChips = new System.Windows.Forms.TextBox();
             this.bAdd = new System.Windows.Forms.Button();
-            this.tbAdd = new System.Windows.Forms.TextBox();
+            this.textBoxAdd = new System.Windows.Forms.TextBox();
             this.textBoxFifthBotChips = new System.Windows.Forms.TextBox();
             this.textBoxForthBotChips = new System.Windows.Forms.TextBox();
             this.textBoxThirdBotChips = new System.Windows.Forms.TextBox();
@@ -137,13 +137,13 @@
             this.bAdd.UseVisualStyleBackColor = true;
             this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
             // 
-            // tbAdd
+            // textBoxAdd
             // 
-            this.tbAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.tbAdd.Location = new System.Drawing.Point(93, 700);
-            this.tbAdd.Name = "tbAdd";
-            this.tbAdd.Size = new System.Drawing.Size(125, 20);
-            this.tbAdd.TabIndex = 8;
+            this.textBoxAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.textBoxAdd.Location = new System.Drawing.Point(93, 700);
+            this.textBoxAdd.Name = "textBoxAdd";
+            this.textBoxAdd.Size = new System.Drawing.Size(125, 20);
+            this.textBoxAdd.TabIndex = 8;
             // 
             // textBoxFifthBotChips
             // 
@@ -342,7 +342,7 @@
             this.Controls.Add(this.textBoxThirdBotChips);
             this.Controls.Add(this.textBoxForthBotChips);
             this.Controls.Add(this.textBoxFifthBotChips);
-            this.Controls.Add(this.tbAdd);
+            this.Controls.Add(this.textBoxAdd);
             this.Controls.Add(this.bAdd);
             this.Controls.Add(this.textBoxChips);
             this.Controls.Add(this.pbTimer);
@@ -369,7 +369,7 @@
         private System.Windows.Forms.ProgressBar pbTimer;
         private System.Windows.Forms.TextBox textBoxChips;
         private System.Windows.Forms.Button bAdd;
-        private System.Windows.Forms.TextBox tbAdd;
+        private System.Windows.Forms.TextBox textBoxAdd;
         private System.Windows.Forms.TextBox textBoxFifthBotChips;
         private System.Windows.Forms.TextBox textBoxForthBotChips;
         private System.Windows.Forms.TextBox textBoxThirdBotChips;
