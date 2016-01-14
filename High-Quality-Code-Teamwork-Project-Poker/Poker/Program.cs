@@ -16,7 +16,7 @@ namespace Poker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PokerTable());
+            Application.Run(new Form1());
         }
     }
 }
