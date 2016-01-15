@@ -58,5 +58,10 @@ namespace Poker
                     break;
             }
         }
+
+        private void AddChips_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
