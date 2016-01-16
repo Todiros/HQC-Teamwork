@@ -3000,34 +3000,34 @@
         {
             if (playerChips <= 0)
             {
-                textBoxPlayerChips.Text = "playerChips : 0";
+                textBoxPlayerChips.Text = "Player Chips: 0";
             }
             if (firstBot.PlayerChips <= 0)
             {
-                textBoxFirstBotChips.Text = "playerChips : 0";
+                textBoxFirstBotChips.Text = "1st Bot Chips: 0";
             }
             if (secondBot.PlayerChips <= 0)
             {
-                textBoxSecondBotChips.Text = "playerChips : 0";
+                textBoxSecondBotChips.Text = "2nd Bot Chips: 0";
             }
             if (thirdBot.PlayerChips <= 0)
             {
-                textBoxThirdBotChips.Text = "playerChips : 0";
+                textBoxThirdBotChips.Text = "3rd Bot Chips: 0";
             }
             if (forthBot.PlayerChips <= 0)
             {
-                textBoxForthBotChips.Text = "playerChips : 0";
+                textBoxForthBotChips.Text = "4th Bot Chips: 0";
             }
             if (fifthBot.PlayerChips <= 0)
             {
-                textBoxFifthBotChips.Text = "playerChips : 0";
+                textBoxFifthBotChips.Text = "5th Bot Chips: 0";
             }
-            textBoxPlayerChips.Text = "playerChips : " + playerChips.ToString();
-            textBoxFirstBotChips.Text = "playerChips : " + firstBot.PlayerChips.ToString();
-            textBoxSecondBotChips.Text = "playerChips : " + secondBot.PlayerChips.ToString();
-            textBoxThirdBotChips.Text = "playerChips : " + thirdBot.PlayerChips.ToString();
-            textBoxForthBotChips.Text = "playerChips : " + forthBot.PlayerChips.ToString();
-            textBoxFifthBotChips.Text = "playerChips : " + fifthBot.PlayerChips.ToString();
+            textBoxPlayerChips.Text = "Player Chips: " + playerChips.ToString();
+            textBoxFirstBotChips.Text = "1st Bot Chips: " + firstBot.PlayerChips.ToString();
+            textBoxSecondBotChips.Text = "2nd Bot Chips: " + secondBot.PlayerChips.ToString();
+            textBoxThirdBotChips.Text = "3rd Bot Chips: " + thirdBot.PlayerChips.ToString();
+            textBoxForthBotChips.Text = "4th Bot Chips: " + forthBot.PlayerChips.ToString();
+            textBoxFifthBotChips.Text = "5th Bot Chips: " + fifthBot.PlayerChips.ToString();
             if (playerChips <= 0)
             {
                 playerTurn = false;
