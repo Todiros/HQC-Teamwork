@@ -24,11 +24,8 @@
         private ProgressBar progressBar = new ProgressBar();
 
         private List<bool?> bools = new List<bool?>();
-
         private List<Type> win = new List<Type>();
-
         private List<string> checkWinners = new List<string>();
-
         private List<int> ints = new List<int>();
 
         private bool playerFoldedTurn = false;
@@ -83,41 +80,20 @@
 
         Poker.Type sorted;
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        private void PokerTable_Load(object sender, EventArgs e) { }
 
         string[] ImgLocation = Directory.GetFiles("Assets\\Cards", "*.png", SearchOption.TopDirectoryOnly);
-        /*string[] ImgLocation ={
-                   "Assets\\Cards\\33.png","Assets\\Cards\\22.png",
-                    "Assets\\Cards\\29.png","Assets\\Cards\\21.png",
-                    "Assets\\Cards\\36.png","Assets\\Cards\\17.png",
-                    "Assets\\Cards\\40.png","Assets\\Cards\\16.png",
-                    "Assets\\Cards\\5.png","Assets\\Cards\\47.png",
-                    "Assets\\Cards\\37.png","Assets\\Cards\\13.png",
-                    
-                    "Assets\\Cards\\12.png",
-                    "Assets\\Cards\\8.png","Assets\\Cards\\18.png",
-                    "Assets\\Cards\\15.png","Assets\\Cards\\27.png"};*/
         int[] Reserve = new int[CARDS_ON_THE_FIELD_COUNT];
 
         Image[] Deck = new Image[ALL_CARDS_COUNT];
-
         PictureBox[] Holder = new PictureBox[ALL_CARDS_COUNT];
-
         Timer timer = new Timer();
         Timer Updates = new Timer();
 
-        // variable 't' changed to 'time'
         int time = 60;
-        // variable 'i' changed to 'index'
         int index;
-        // variable 'bb' changed to 'bigBlind'
         int bigBlind = 500;
-        // variable 'sb' changed to smallBlind'
         int smallBlind = 250;
-        // TODO: figure out what 'up' is. Its connected with 'time' somehow.
         int up = 10000000;
         int turnCount = 0;
         #endregion
@@ -179,7 +155,6 @@
             buttonSmallBlind.Visible = false;
             textBoxRaise.Text = (bigBlind * 2).ToString();
         }
-
         async Task Shuffle()
         {
             bools.Add(playerFoldedTurn);
@@ -576,7 +551,7 @@
                 buttonRaise.Enabled = true;
                 buttonFold.Enabled = true;
             }
-        }
+        } // TODO
         async Task Turns()
         {
             #region Rotating
@@ -893,7 +868,9 @@
                     }
                 }
             }
-        }
+        } // TODO
+
+        // Dependant only on 'win' and 'sorted'
         private void rStraightFlush(ref double current, ref double Power, int[] st1, int[] st2, int[] st3, int[] st4)
         {
             if (current >= -1)
@@ -967,7 +944,7 @@
                     }
                 }
             }
-        }
+        } 
         private void rFourOfAKind(ref double current, ref double Power, int[] Straight)
         {
             if (current >= -1)
@@ -1980,7 +1957,7 @@
                     }
                 }
             }
-        }
+        } // TODO
         async Task CheckRaise(int currentTurn, int raiseTurn)
         {
             if (raising)
@@ -2208,7 +2185,7 @@
 
                 await Turns();
             }
-        }
+        } // TODO
         void FixCall(Label status, ref int cCall, ref int cRaise, int options)
         {
             if (rounds != 4)
@@ -2388,7 +2365,7 @@
             #endregion
 
 
-        }
+        } // TODO
         async Task Finish(int n)
         {
             if (n == 2)
@@ -2519,6 +2496,8 @@
             await Shuffle();
             //await Turns();
         }
+
+        // Dependant on 'win', 'sorted', 'pStatus', 'b1Status' ... 'b5Status', 'Rules()', 'Winner()'
         void FixWinners()
         {
             win.Clear();
@@ -2578,6 +2557,8 @@
             Winner(forthBot.PlayerType, forthBotPower, "Bot 4", forthBot.PlayerChips, fixedLast);
             Winner(fifthBot.PlayerType, fifthBotPower, "Bot 5", fifthBot.PlayerChips, fixedLast);
         }
+
+        // Dependant on 'Holder'
         void AI(int c1, int c2, ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower, double botCurrent)
         {
             if (!sFTurn)
@@ -2628,11 +2609,13 @@
                 Holder[c1].Visible = false;
                 Holder[c2].Visible = false;
             }
-        }
+        } // TODO
+
+        // Dependant only on 'HP' and 'PH'
         private void HighCard(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
         {
             HP(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower, 20, 25);
-        }
+        } 
         private void PairTable(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
         {
             HP(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower, 16, 25);
@@ -2751,6 +2734,7 @@
             }
         }
 
+        // Dependant on 'raising', 'call' and 'textBoxPot'
         private void Fold(ref bool sTurn, ref bool sFTurn, Label sStatus)
         {
             raising = false;
@@ -2781,11 +2765,15 @@
             raising = true;
             sTurn = false;
         }
+
+        // Independant
         private static double RoundN(int sChips, int n)
         {
             double a = Math.Round((sChips / n) / 100d, 0) * 100;
             return a;
         }
+
+        // Dependant on 'call', 'raise', 'rounds' and 'RoundN()', 'Fold()', 'Check()', etc.
         private void HP(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower, int n, int n1)
         {
             Random rand = new Random();
@@ -2939,6 +2927,7 @@
                 sFTurn = true;
             }
         }
+        // + 'raising' and 'TextBoxPot'
         void Smooth(ref int botChips, ref bool botTurn, ref bool botFTurn, Label botStatus, int name, int n, int r)
         {
             Random rand = new Random();
