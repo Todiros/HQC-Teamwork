@@ -165,10 +165,6 @@
             Updates.Interval = (1 * 1 * 100);
             Updates.Tick += Update_Tick;
 
-            //textBoxBigBlind.Visible = true;
-            //textBoxSmallBlind.Visible = true;
-            //buttonBigBlind.Visible = true;
-            //buttonSmallBlind.Visible = true;
             textBoxBigBlind.Visible = true;
             textBoxSmallBlind.Visible = true;
             buttonBigBlind.Visible = true;
@@ -596,8 +592,8 @@
 
                     buttonRaise.Enabled = true;
                     buttonCall.Enabled = true;
-                    buttonRaise.Enabled = true;
-                    buttonRaise.Enabled = true;
+                    //buttonRaise.Enabled = true;
+                    //buttonRaise.Enabled = true;
                     buttonFold.Enabled = true;
 
                     turnCount++;
@@ -623,8 +619,8 @@
                 pbTimer.Visible = false;
                 buttonRaise.Enabled = false;
                 buttonCall.Enabled = false;
-                buttonRaise.Enabled = false;
-                buttonRaise.Enabled = false;
+                //buttonRaise.Enabled = false;
+                //buttonRaise.Enabled = false;
                 buttonFold.Enabled = false;
 
                 timer.Stop();
@@ -1909,8 +1905,8 @@
                     }
                     if (checkWinners.Contains("Bot 1"))
                     {
-                        fifthBot.PlayerChips += int.Parse(textBoxPot.Text) / winners;
-                        textBoxFirstBotChips.Text = fifthBot.PlayerChips.ToString();
+                        firstBot.PlayerChips += int.Parse(textBoxPot.Text) / winners;
+                        textBoxFirstBotChips.Text = firstBot.PlayerChips.ToString();
                         //b1Panel.Visible = true;
                     }
                     if (checkWinners.Contains("Bot 2"))
@@ -2002,6 +1998,7 @@
                         call = 0;
                         raisedTurn = 123;
                         rounds++;
+
                         if (!playerFoldedTurn)
                             pStatus.Text = "";
                         if (!firstBotFoldedTurn)
@@ -2024,12 +2021,10 @@
                     if (Holder[j].Image != Deck[j])
                     {
                         Holder[j].Image = Deck[j];
-                        player.PlayerCall = 0; player.PlayerRaise = 0;
-                        firstBot.PlayerCall = 0; firstBot.PlayerRaise = 0;
-                        secondBot.PlayerCall = 0; secondBot.PlayerRaise = 0;
-                        thirdBot.PlayerCall = 0; thirdBot.PlayerRaise = 0;
-                        forthBot.PlayerCall = 0; forthBot.PlayerRaise = 0;
-                        fifthBot.PlayerCall = 0; fifthBot.PlayerCall = 0;
+
+                        PlayerRaiseInitializing();
+
+                        PlayerCallInitializing();
                     }
                 }
             }
@@ -2040,12 +2035,10 @@
                     if (Holder[j].Image != Deck[j])
                     {
                         Holder[j].Image = Deck[j];
-                        player.PlayerCall = 0; player.PlayerRaise = 0;
-                        firstBot.PlayerCall = 0; firstBot.PlayerRaise = 0;
-                        secondBot.PlayerCall = 0; secondBot.PlayerRaise = 0;
-                        thirdBot.PlayerCall = 0; thirdBot.PlayerRaise = 0;
-                        forthBot.PlayerCall = 0; forthBot.PlayerRaise = 0;
-                        fifthBot.PlayerCall = 0; fifthBot.PlayerCall = 0;
+
+                        PlayerRaiseInitializing(); // O
+
+                        PlayerCallInitializing();
                     }
                 }
             }
@@ -2056,12 +2049,10 @@
                     if (Holder[j].Image != Deck[j])
                     {
                         Holder[j].Image = Deck[j];
-                        player.PlayerCall = 0; player.PlayerRaise = 0;
-                        firstBot.PlayerCall = 0; firstBot.PlayerRaise = 0;
-                        secondBot.PlayerCall = 0; secondBot.PlayerRaise = 0;
-                        thirdBot.PlayerCall = 0; thirdBot.PlayerRaise = 0;
-                        forthBot.PlayerCall = 0; forthBot.PlayerRaise = 0;
-                        fifthBot.PlayerCall = 0; fifthBot.PlayerCall = 0;
+
+                        PlayerRaiseInitializing();
+
+                        PlayerCallInitializing();
                     }
                 }
             }
@@ -2150,19 +2141,12 @@
                         buttonRaise.Text = "raise";
                     }
                 }
-                player.PlayerPanel.Visible = false;
-                firstBot.PlayerPanel.Visible = false;
-                secondBot.PlayerPanel.Visible = false;
-                thirdBot.PlayerPanel.Visible = false;
-                forthBot.PlayerPanel.Visible = false;
-                fifthBot.PlayerPanel.Visible = false;
 
-                player.PlayerCall = 0; player.PlayerRaise = 0;
-                firstBot.PlayerCall = 0; firstBot.PlayerRaise = 0;
-                secondBot.PlayerCall = 0; secondBot.PlayerRaise = 0;
-                thirdBot.PlayerCall = 0; thirdBot.PlayerRaise = 0;
-                forthBot.PlayerCall = 0; forthBot.PlayerRaise = 0;
-                fifthBot.PlayerCall = 0; fifthBot.PlayerCall = 0;
+                PlayerPanelVisibility();
+            
+                PlayerRaiseInitializing();
+
+                PlayerCallInitializing();
 
                 last = 0;
                 call = bigBlind;
@@ -2173,19 +2157,9 @@
 
                 this.playerPower = 0; this.playerType = -1;
 
-                player.PlayerPower = 0;
-                firstBot.PlayerPower = 0;
-                secondBot.PlayerPower = 0;
-                thirdBot.PlayerPower = 0;
-                forthBot.PlayerPower = 0;
-                fifthBot.PlayerPower = 0;
+               PlayersPowerInitializing();
 
-                player.PlayerType = -1;
-                firstBot.PlayerType = -1;
-                secondBot.PlayerType = -1;
-                thirdBot.PlayerType = -1;
-                forthBot.PlayerType = -1;
-                fifthBot.PlayerType = -1;
+                PlayersTypeInitializing();
 
                 ints.Clear();
                 checkWinners.Clear();
@@ -2209,6 +2183,28 @@
                 await Turns();
             }
         }
+
+        private void PlayersTypeInitializing()
+        {
+            player.PlayerType = -1;
+            firstBot.PlayerType = -1;
+            secondBot.PlayerType = -1;
+            thirdBot.PlayerType = -1;
+            forthBot.PlayerType = -1;
+            fifthBot.PlayerType = -1;
+        }
+
+        // Making the players panel not visible 
+        private void PlayerPanelVisibility()
+        {
+            player.PlayerPanel.Visible = false;
+            firstBot.PlayerPanel.Visible = false;
+            secondBot.PlayerPanel.Visible = false;
+            thirdBot.PlayerPanel.Visible = false;
+            forthBot.PlayerPanel.Visible = false;
+            fifthBot.PlayerPanel.Visible = false;
+        }
+
         void FixCall(Label status, ref int cCall, ref int cRaise, int options)
         {
             if (rounds != 4)
@@ -2395,12 +2391,8 @@
             {
                 FixWinners();
             }
-            playerPanel.Visible = false;
-            firstBot.PlayerPanel.Visible = false;
-            secondBot.PlayerPanel.Visible = false;
-            thirdBot.PlayerPanel.Visible = false;
-            forthBot.PlayerPanel.Visible = false;
-            fifthBot.PlayerPanel.Visible = false;
+
+            PlayerPanelVisibility();
 
             call = bigBlind;
             raise = 0;
@@ -2408,26 +2400,13 @@
             type = 0;
             rounds = 0;
 
-            player.PlayerPower = 0;
-            firstBot.PlayerPower = 0;
-            secondBot.PlayerPower = 0;
-            thirdBot.PlayerPower = 0;
-            forthBot.PlayerPower = 0;
-            fifthBot.PlayerPower = 0;
+            PlayersPowerInitializing();
+
             raise = 0;
 
-            player.PlayerType = -1;
-            firstBot.PlayerType = -1;
-            secondBot.PlayerType = -1;
-            thirdBot.PlayerType = -1;
-            forthBot.PlayerType = -1;
-            fifthBot.PlayerType = -1;
+            PlayersTypeInitializing();
 
-            firstBotTurn = false;
-            secondBotTurn = false;
-            thirdBotTurn = false;
-            forthBotTurn = false;
-            fifthBotTurn = false;
+            NotBotTurn();
 
             firstBotFoldedTurn = false;
             secondBotFoldedTurn = false;
@@ -2435,31 +2414,16 @@
             forthBotFoldedTurn = false;
             fifthBotFoldedTurn = false;
 
-            player.PlayerFolded = false;
-            firstBot.PlayerFolded = false;
-            secondBot.PlayerFolded = false;
-            thirdBot.PlayerFolded = false;
-            forthBot.PlayerFolded = false;
-            fifthBot.PlayerFolded = false;
+            PlayerNotFolded();
 
             playerFoldedTurn = false;
             playerTurn = true;
             restart = false;
             raising = false;
 
-            player.PlayerCall = 0;
-            firstBot.PlayerCall = 0;
-            secondBot.PlayerCall = 0;
-            thirdBot.PlayerCall = 0;
-            forthBot.PlayerCall = 0;
-            fifthBot.PlayerCall = 0;
+            PlayerCallInitializing();
 
-            player.PlayerRaise = 0;
-            firstBot.PlayerRaise = 0;
-            secondBot.PlayerRaise = 0;
-            thirdBot.PlayerRaise = 0;
-            forthBot.PlayerRaise = 0;
-            fifthBot.PlayerRaise = 0;
+            PlayerRaiseInitializing();
 
             height = 0;
             width = 0;
@@ -2519,6 +2483,58 @@
             await Shuffle();
             //await Turns();
         }
+
+        private void PlayersPowerInitializing()
+        {
+            player.PlayerPower = 0;
+            firstBot.PlayerPower = 0;
+            secondBot.PlayerPower = 0;
+            thirdBot.PlayerPower = 0;
+            forthBot.PlayerPower = 0;
+            fifthBot.PlayerPower = 0;
+        }
+
+        private void NotBotTurn()
+        {
+            firstBotTurn = false;
+            secondBotTurn = false;
+            thirdBotTurn = false;
+            forthBotTurn = false;
+            fifthBotTurn = false;
+        }
+
+        private void PlayerNotFolded()
+        {
+            player.PlayerFolded = false;
+            firstBot.PlayerFolded = false;
+            secondBot.PlayerFolded = false;
+            thirdBot.PlayerFolded = false;
+            forthBot.PlayerFolded = false;
+            fifthBot.PlayerFolded = false;
+        }
+
+        //Initializing players call
+        private void PlayerCallInitializing()
+        {
+            player.PlayerCall = 0;
+            firstBot.PlayerCall = 0;
+            secondBot.PlayerCall = 0;
+            thirdBot.PlayerCall = 0;
+            forthBot.PlayerCall = 0;
+            fifthBot.PlayerCall = 0;
+        }
+
+        //Initializing players raise
+        private void PlayerRaiseInitializing()
+        {
+            player.PlayerRaise = 0;
+            firstBot.PlayerRaise = 0;
+            secondBot.PlayerRaise = 0;
+            thirdBot.PlayerRaise = 0;
+            forthBot.PlayerRaise = 0;
+            fifthBot.PlayerRaise = 0;
+        }
+
         void FixWinners()
         {
             win.Clear();
