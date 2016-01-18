@@ -107,10 +107,10 @@
         PictureBox[] Holder = new PictureBox[ALL_CARDS_COUNT];
 
         Timer timer = new Timer();
-        Timer Updates = new Timer();
+        Timer updates = new Timer();
 
         // variable 't' changed to 'time'
-        int time = 60;
+        int timeRemaining = 60;
         // variable 'i' changed to 'index'
         int index;
         // variable 'bb' changed to 'bigBlind'
@@ -137,7 +137,7 @@
             MaximizeBox = false;
             MinimizeBox = false;
 
-            Updates.Start();
+            updates.Start();
             InitializeComponent();
 
             width = this.Width;
@@ -162,8 +162,8 @@
 
             timer.Interval = (1 * 1 * 1000);
             timer.Tick += timer_Tick;
-            Updates.Interval = (1 * 1 * 100);
-            Updates.Tick += Update_Tick;
+            updates.Interval = (1 * 1 * 100);
+            updates.Tick += Update_Tick;
 
             textBoxBigBlind.Visible = true;
             textBoxSmallBlind.Visible = true;
@@ -215,6 +215,7 @@
 
                 Deck[index] = Image.FromFile(ImgLocation[index]);
                 var charsToRemove = new string[] { "Assets\\Cards\\", ".png" };
+
                 foreach (var c in charsToRemove)
                 {
                     ImgLocation[index] = ImgLocation[index].Replace(c, string.Empty);
@@ -242,12 +243,12 @@
                     //Holder[i].Dock = DockStyle.Top;
                     Holder[index].Location = new Point(horizontal, vertical);
                     horizontal += Holder[index].Width;
-                    this.Controls.Add(playerPanel);
-                    playerPanel.Location = new Point(Holder[0].Left - 10, Holder[0].Top - 10);
-                    playerPanel.BackColor = Color.DarkBlue;
-                    playerPanel.Height = 150;
-                    playerPanel.Width = 180;
-                    playerPanel.Visible = false;
+                    this.Controls.Add(player.PlayerPanel);
+                    player.PlayerPanel.Location = new Point(Holder[0].Left - 10, Holder[0].Top - 10);
+                    player.PlayerPanel.BackColor = Color.DarkBlue;
+                    player.PlayerPanel.Height = 150;
+                    player.PlayerPanel.Width = 180;
+                    player.PlayerPanel.Visible = false;
                 }
 
                 if (firstBot.PlayerChips > 0)
@@ -581,12 +582,12 @@
                 if (playerTurn)
                 {
                     FixCall(pStatus, ref playerCall, ref playerRaise, 1);
-                    //MessageBox.Show("Player's turn");
+                    //MessageBox.Show("Player'cardsCurrentValue turn");
 
                     pbTimer.Visible = true;
                     pbTimer.Value = 1000;
 
-                    time = 60;
+                    timeRemaining = 60;
                     up = 10000000;
                     timer.Start();
 
@@ -640,7 +641,7 @@
                         FixCall(b1Status, ref firstBotCall, ref firstBotRaise, 1);
                         FixCall(b1Status, ref firstBotCall, ref firstBotRaise, 2);
                         Rules(2, 3, "Bot 1", ref firstBotType, ref firstBotPower, firstBotFoldedTurn);
-                        MessageBox.Show("Bot 1's turn");
+                        MessageBox.Show("Bot 1'cardsCurrentValue turn");
                         AI(2, 3, ref firstBotChips, ref firstBotTurn, ref firstBotFoldedTurn, b1Status, 0, firstBotPower, firstBot.PlayerType);
                         turnCount++;
                         last = 1;
@@ -673,7 +674,7 @@
                         FixCall(b2Status, ref secondBotCall, ref secondBotRaise, 1);
                         FixCall(b2Status, ref secondBotCall, ref secondBotRaise, 2);
                         Rules(4, 5, "Bot 2", ref secondBotType, ref secondBotPower, secondBotFoldedTurn);
-                        MessageBox.Show("Bot 2's turn");
+                        MessageBox.Show("Bot 2'cardsCurrentValue turn");
                         AI(4, 5, ref secondBotChips, ref secondBotTurn, ref secondBotFoldedTurn, b2Status, 1, secondBotPower, secondBot.PlayerType);
                         turnCount++;
                         last = 2;
@@ -706,7 +707,7 @@
                         FixCall(b3Status, ref thirdBotCall, ref thirdBotRaise, 1);
                         FixCall(b3Status, ref thirdBotCall, ref thirdBotRaise, 2);
                         Rules(6, 7, "Bot 3", ref thirdBotType, ref thirdBotPower, thirdBotFoldedTurn);
-                        MessageBox.Show("Bot 3's turn");
+                        MessageBox.Show("Bot 3'cardsCurrentValue turn");
                         AI(6, 7, ref thirdBotChips, ref thirdBotTurn, ref thirdBotFoldedTurn, b3Status, 2, thirdBotPower, thirdBot.PlayerType);
                         turnCount++;
                         last = 3;
@@ -739,7 +740,7 @@
                         FixCall(b4Status, ref forthBotCall, ref forthBotRaise, 1);
                         FixCall(b4Status, ref forthBotCall, ref forthBotRaise, 2);
                         Rules(8, 9, "Bot 4", ref forthBotType, ref forthBotPower, forthBotFoldedTurn);
-                        MessageBox.Show("Bot 4's turn");
+                        MessageBox.Show("Bot 4'cardsCurrentValue turn");
                         AI(8, 9, ref forthBotChips, ref forthBotTurn, ref forthBotFoldedTurn, b4Status, 3, forthBotPower, forthBot.PlayerType);
                         turnCount++;
                         last = 4;
@@ -772,7 +773,7 @@
                         FixCall(b5Status, ref fifthBotCall, ref fifthBotRaise, 1);
                         FixCall(b5Status, ref fifthBotCall, ref fifthBotRaise, 2);
                         Rules(10, 11, "Bot 5", ref fifthBotType, ref fifthBotPower, fifthBotFoldedTurn);
-                        MessageBox.Show("Bot 5's turn");
+                        MessageBox.Show("Bot 5'cardsCurrentValue turn");
                         AI(10, 11, ref fifthBotChips, ref fifthBotTurn, ref fifthBotFoldedTurn, b5Status, 4, fifthBotPower, fifthBot.PlayerType);
                         turnCount++;
                         last = 5;
@@ -811,20 +812,23 @@
             }
         }
 
-        void Rules(int c1, int c2, string currentText, ref double current, ref double Power, bool foldedTurn)
+        void Rules(int cardOne, int cardTwo, string currentText, ref double cardsCurrentValue, ref double power, bool foldedTurn)
         {
-            if (c1 == 0 && c2 == 1)
+            if (cardOne == 0 && cardTwo == 1)
             {
             }
-            if (!foldedTurn || c1 == 0 && c2 == 1 && pStatus.Text.Contains("Fold") == false)
+            if (!foldedTurn || cardOne == 0 && cardTwo == 1 && pStatus.Text.Contains("Fold") == false)
             {
                 #region Variables
-                bool done = false, vf = false;
+
+                bool done = false;
+                bool vf = false;
+
                 int[] Straight1 = new int[5];
                 int[] Straight = new int[7];
 
-                Straight[0] = Reserve[c1];
-                Straight[1] = Reserve[c2];
+                Straight[0] = Reserve[cardOne];
+                Straight[1] = Reserve[cardTwo];
                 Straight1[0] = Straight[2] = Reserve[12];
                 Straight1[1] = Straight[3] = Reserve[13];
                 Straight1[2] = Straight[4] = Reserve[14];
@@ -841,56 +845,62 @@
                 var st3 = c.Select(o => o / 4).Distinct().ToArray();
                 var st4 = d.Select(o => o / 4).Distinct().ToArray();
 
-                Array.Sort(Straight); Array.Sort(st1); Array.Sort(st2); Array.Sort(st3); Array.Sort(st4);
+                Array.Sort(Straight);
+                Array.Sort(st1);
+                Array.Sort(st2);
+                Array.Sort(st3);
+                Array.Sort(st4);
                 #endregion
-                for (index = 0; index < 16; index++)
+
+                const int CARDS_ON_TABLE = 16;
+                for (index = 0; index < CARDS_ON_TABLE; index++)
                 {
-                    if (Reserve[index] == int.Parse(Holder[c1].Tag.ToString()) && Reserve[index + 1] == int.Parse(Holder[c2].Tag.ToString()))
+                    if (Reserve[index] == int.Parse(Holder[cardOne].Tag.ToString()) && Reserve[index + 1] == int.Parse(Holder[cardTwo].Tag.ToString()))
                     {
                         //Pair from Hand current = 1
 
-                        rPairFromHand(ref current, ref Power);
+                        CheckForPairFromHand(ref cardsCurrentValue, ref power);
 
                         #region Pair or Two Pair from Table current = 2 || 0
-                        rPairTwoPair(ref current, ref Power);
+                        CheckForPairTwoPair(ref cardsCurrentValue, ref power);
                         #endregion
 
                         #region Two Pair current = 2
-                        rTwoPair(ref current, ref Power);
+                        CheckForTwoPair(ref cardsCurrentValue, ref power);
                         #endregion
 
                         #region Three of a kind current = 3
-                        rThreeOfAKind(ref current, ref Power, Straight);
+                        CheckThreeOfAKind(ref cardsCurrentValue, ref power, Straight);
                         #endregion
 
                         #region Straight current = 4
-                        rStraight(ref current, ref Power, Straight);
+                        CheckStraight(ref cardsCurrentValue, ref power, Straight);
                         #endregion
 
                         #region Flush current = 5 || 5.5
-                        rFlush(ref current, ref Power, ref vf, Straight1);
+                        CheckFlush(ref cardsCurrentValue, ref power, ref vf, Straight1);
                         #endregion
 
                         #region Full House current = 6
-                        rFullHouse(ref current, ref Power, ref done, Straight);
+                        CheckForFullHouse(ref cardsCurrentValue, ref power, ref done, Straight);
                         #endregion
 
                         #region Four of a Kind current = 7
-                        rFourOfAKind(ref current, ref Power, Straight);
+                        CheckForFourOfAKind(ref cardsCurrentValue, ref power, Straight);
                         #endregion
 
                         #region Straight Flush current = 8 || 9
-                        rStraightFlush(ref current, ref Power, st1, st2, st3, st4);
+                        CheckForStraightFlush(ref cardsCurrentValue, ref power, st1, st2, st3, st4);
                         #endregion
 
                         #region High Card current = -1
-                        rHighCard(ref current, ref Power);
+                        CheckForHighCard(ref cardsCurrentValue, ref power);
                         #endregion
                     }
                 }
             }
         }
-        private void rStraightFlush(ref double current, ref double Power, int[] st1, int[] st2, int[] st3, int[] st4)
+        private void CheckForStraightFlush(ref double current, ref double power, int[] st1, int[] st2, int[] st3, int[] st4)
         {
             if (current >= -1)
             {
@@ -899,15 +909,15 @@
                     if (st1[0] + 4 == st1[4])
                     {
                         current = 8;
-                        Power = (st1.Max()) / 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 8 });
+                        power = (st1.Max()) / 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 8 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                     if (st1[0] == 0 && st1[1] == 9 && st1[2] == 10 && st1[3] == 11 && st1[0] + 12 == st1[4])
                     {
                         current = 9;
-                        Power = (st1.Max()) / 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 9 });
+                        power = (st1.Max()) / 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 9 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
@@ -916,15 +926,15 @@
                     if (st2[0] + 4 == st2[4])
                     {
                         current = 8;
-                        Power = (st2.Max()) / 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 8 });
+                        power = (st2.Max()) / 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 8 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                     if (st2[0] == 0 && st2[1] == 9 && st2[2] == 10 && st2[3] == 11 && st2[0] + 12 == st2[4])
                     {
                         current = 9;
-                        Power = (st2.Max()) / 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 9 });
+                        power = (st2.Max()) / 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 9 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
@@ -933,15 +943,15 @@
                     if (st3[0] + 4 == st3[4])
                     {
                         current = 8;
-                        Power = (st3.Max()) / 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 8 });
+                        power = (st3.Max()) / 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 8 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                     if (st3[0] == 0 && st3[1] == 9 && st3[2] == 10 && st3[3] == 11 && st3[0] + 12 == st3[4])
                     {
                         current = 9;
-                        Power = (st3.Max()) / 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 9 });
+                        power = (st3.Max()) / 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 9 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
@@ -950,21 +960,21 @@
                     if (st4[0] + 4 == st4[4])
                     {
                         current = 8;
-                        Power = (st4.Max()) / 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 8 });
+                        power = (st4.Max()) / 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 8 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                     if (st4[0] == 0 && st4[1] == 9 && st4[2] == 10 && st4[3] == 11 && st4[0] + 12 == st4[4])
                     {
                         current = 9;
-                        Power = (st4.Max()) / 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 9 });
+                        power = (st4.Max()) / 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 9 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
             }
         }
-        private void rFourOfAKind(ref double current, ref double Power, int[] Straight)
+        private void CheckForFourOfAKind(ref double current, ref double power, int[] Straight)
         {
             if (current >= -1)
             {
@@ -974,25 +984,25 @@
                         Straight[j] / 4 == Straight[j + 3] / 4)
                     {
                         current = 7;
-                        Power = (Straight[j] / 4) * 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 7 });
+                        power = (Straight[j] / 4) * 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 7 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                     if (Straight[j] / 4 == 0 && Straight[j + 1] / 4 == 0 && Straight[j + 2] / 4 == 0 && Straight[j + 3] / 4 == 0)
                     {
                         current = 7;
-                        Power = 13 * 4 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 7 });
+                        power = 13 * 4 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 7 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
             }
         }
-        private void rFullHouse(ref double current, ref double Power, ref bool done, int[] Straight)
+        private void CheckForFullHouse(ref double current, ref double power, ref bool done, int[] Straight)
         {
             if (current >= -1)
             {
-                type = Power;
+                type = power;
                 for (int j = 0; j <= 12; j++)
                 {
                     var fh = Straight.Where(o => o / 4 == j).ToArray();
@@ -1003,16 +1013,16 @@
                             if (fh.Max() / 4 == 0)
                             {
                                 current = 6;
-                                Power = 13 * 2 + current * 100;
-                                win.Add(new Type() { Power = Power, Current = 6 });
+                                power = 13 * 2 + current * 100;
+                                win.Add(new Type() { Power = power, Current = 6 });
                                 sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                                 break;
                             }
                             if (fh.Max() / 4 > 0)
                             {
                                 current = 6;
-                                Power = fh.Max() / 4 * 2 + current * 100;
-                                win.Add(new Type() { Power = Power, Current = 6 });
+                                power = fh.Max() / 4 * 2 + current * 100;
+                                win.Add(new Type() { Power = power, Current = 6 });
                                 sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                                 break;
                             }
@@ -1021,13 +1031,13 @@
                         {
                             if (fh.Max() / 4 == 0)
                             {
-                                Power = 13;
+                                power = 13;
                                 done = true;
                                 j = -1;
                             }
                             else
                             {
-                                Power = fh.Max() / 4;
+                                power = fh.Max() / 4;
                                 done = true;
                                 j = -1;
                             }
@@ -1036,11 +1046,11 @@
                 }
                 if (current != 6)
                 {
-                    Power = type;
+                    power = type;
                 }
             }
         }
-        private void rFlush(ref double current, ref double Power, ref bool vf, int[] Straight1)
+        private void CheckFlush(ref double current, ref double power, ref bool vf, int[] Straight1)
         {
             if (current >= -1)
             {
@@ -1055,24 +1065,24 @@
                         if (Reserve[index] / 4 > f1.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         if (Reserve[index + 1] / 4 > f1.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index + 1] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index + 1] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else if (Reserve[index] / 4 < f1.Max() / 4 && Reserve[index + 1] / 4 < f1.Max() / 4)
                         {
                             current = 5;
-                            Power = f1.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f1.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1085,16 +1095,16 @@
                         if (Reserve[index] / 4 > f1.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else
                         {
                             current = 5;
-                            Power = f1.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f1.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1104,16 +1114,16 @@
                         if (Reserve[index + 1] / 4 > f1.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index + 1] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index + 1] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else
                         {
                             current = 5;
-                            Power = f1.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f1.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1124,24 +1134,24 @@
                     if (Reserve[index] % 4 == f1[0] % 4 && Reserve[index] / 4 > f1.Min() / 4)
                     {
                         current = 5;
-                        Power = Reserve[index] + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = Reserve[index] + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
                     if (Reserve[index + 1] % 4 == f1[0] % 4 && Reserve[index + 1] / 4 > f1.Min() / 4)
                     {
                         current = 5;
-                        Power = Reserve[index + 1] + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = Reserve[index + 1] + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
                     else if (Reserve[index] / 4 < f1.Min() / 4 && Reserve[index + 1] / 4 < f1.Min())
                     {
                         current = 5;
-                        Power = f1.Max() + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = f1.Max() + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
@@ -1154,24 +1164,24 @@
                         if (Reserve[index] / 4 > f2.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         if (Reserve[index + 1] / 4 > f2.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index + 1] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index + 1] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else if (Reserve[index] / 4 < f2.Max() / 4 && Reserve[index + 1] / 4 < f2.Max() / 4)
                         {
                             current = 5;
-                            Power = f2.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f2.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1184,16 +1194,16 @@
                         if (Reserve[index] / 4 > f2.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else
                         {
                             current = 5;
-                            Power = f2.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f2.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1203,16 +1213,16 @@
                         if (Reserve[index + 1] / 4 > f2.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index + 1] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index + 1] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else
                         {
                             current = 5;
-                            Power = f2.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f2.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1223,24 +1233,24 @@
                     if (Reserve[index] % 4 == f2[0] % 4 && Reserve[index] / 4 > f2.Min() / 4)
                     {
                         current = 5;
-                        Power = Reserve[index] + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = Reserve[index] + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
                     if (Reserve[index + 1] % 4 == f2[0] % 4 && Reserve[index + 1] / 4 > f2.Min() / 4)
                     {
                         current = 5;
-                        Power = Reserve[index + 1] + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = Reserve[index + 1] + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
                     else if (Reserve[index] / 4 < f2.Min() / 4 && Reserve[index + 1] / 4 < f2.Min())
                     {
                         current = 5;
-                        Power = f2.Max() + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = f2.Max() + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
@@ -1253,24 +1263,24 @@
                         if (Reserve[index] / 4 > f3.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         if (Reserve[index + 1] / 4 > f3.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index + 1] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index + 1] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else if (Reserve[index] / 4 < f3.Max() / 4 && Reserve[index + 1] / 4 < f3.Max() / 4)
                         {
                             current = 5;
-                            Power = f3.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f3.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1283,16 +1293,16 @@
                         if (Reserve[index] / 4 > f3.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else
                         {
                             current = 5;
-                            Power = f3.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f3.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1302,16 +1312,16 @@
                         if (Reserve[index + 1] / 4 > f3.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index + 1] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index + 1] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else
                         {
                             current = 5;
-                            Power = f3.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f3.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1322,24 +1332,24 @@
                     if (Reserve[index] % 4 == f3[0] % 4 && Reserve[index] / 4 > f3.Min() / 4)
                     {
                         current = 5;
-                        Power = Reserve[index] + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = Reserve[index] + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
                     if (Reserve[index + 1] % 4 == f3[0] % 4 && Reserve[index + 1] / 4 > f3.Min() / 4)
                     {
                         current = 5;
-                        Power = Reserve[index + 1] + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = Reserve[index + 1] + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
                     else if (Reserve[index] / 4 < f3.Min() / 4 && Reserve[index + 1] / 4 < f3.Min())
                     {
                         current = 5;
-                        Power = f3.Max() + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = f3.Max() + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
@@ -1352,24 +1362,24 @@
                         if (Reserve[index] / 4 > f4.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         if (Reserve[index + 1] / 4 > f4.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index + 1] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index + 1] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else if (Reserve[index] / 4 < f4.Max() / 4 && Reserve[index + 1] / 4 < f4.Max() / 4)
                         {
                             current = 5;
-                            Power = f4.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f4.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1382,16 +1392,16 @@
                         if (Reserve[index] / 4 > f4.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else
                         {
                             current = 5;
-                            Power = f4.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f4.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1401,16 +1411,16 @@
                         if (Reserve[index + 1] / 4 > f4.Max() / 4)
                         {
                             current = 5;
-                            Power = Reserve[index + 1] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = Reserve[index + 1] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
                         else
                         {
                             current = 5;
-                            Power = f4.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 5 });
+                            power = f4.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 5 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1421,24 +1431,24 @@
                     if (Reserve[index] % 4 == f4[0] % 4 && Reserve[index] / 4 > f4.Min() / 4)
                     {
                         current = 5;
-                        Power = Reserve[index] + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = Reserve[index] + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
                     if (Reserve[index + 1] % 4 == f4[0] % 4 && Reserve[index + 1] / 4 > f4.Min() / 4)
                     {
                         current = 5;
-                        Power = Reserve[index + 1] + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = Reserve[index + 1] + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
                     else if (Reserve[index] / 4 < f4.Min() / 4 && Reserve[index + 1] / 4 < f4.Min())
                     {
                         current = 5;
-                        Power = f4.Max() + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5 });
+                        power = f4.Max() + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         vf = true;
                     }
@@ -1449,15 +1459,15 @@
                     if (Reserve[index] / 4 == 0 && Reserve[index] % 4 == f1[0] % 4 && vf && f1.Length > 0)
                     {
                         current = 5.5;
-                        Power = 13 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5.5 });
+                        power = 13 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5.5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                     if (Reserve[index + 1] / 4 == 0 && Reserve[index + 1] % 4 == f1[0] % 4 && vf && f1.Length > 0)
                     {
                         current = 5.5;
-                        Power = 13 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5.5 });
+                        power = 13 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5.5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
@@ -1466,15 +1476,15 @@
                     if (Reserve[index] / 4 == 0 && Reserve[index] % 4 == f2[0] % 4 && vf && f2.Length > 0)
                     {
                         current = 5.5;
-                        Power = 13 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5.5 });
+                        power = 13 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5.5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                     if (Reserve[index + 1] / 4 == 0 && Reserve[index + 1] % 4 == f2[0] % 4 && vf && f2.Length > 0)
                     {
                         current = 5.5;
-                        Power = 13 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5.5 });
+                        power = 13 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5.5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
@@ -1483,15 +1493,15 @@
                     if (Reserve[index] / 4 == 0 && Reserve[index] % 4 == f3[0] % 4 && vf && f3.Length > 0)
                     {
                         current = 5.5;
-                        Power = 13 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5.5 });
+                        power = 13 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5.5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                     if (Reserve[index + 1] / 4 == 0 && Reserve[index + 1] % 4 == f3[0] % 4 && vf && f3.Length > 0)
                     {
                         current = 5.5;
-                        Power = 13 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5.5 });
+                        power = 13 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5.5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
@@ -1500,21 +1510,21 @@
                     if (Reserve[index] / 4 == 0 && Reserve[index] % 4 == f4[0] % 4 && vf && f4.Length > 0)
                     {
                         current = 5.5;
-                        Power = 13 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5.5 });
+                        power = 13 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5.5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                     if (Reserve[index + 1] / 4 == 0 && Reserve[index + 1] % 4 == f4[0] % 4 && vf)
                     {
                         current = 5.5;
-                        Power = 13 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 5.5 });
+                        power = 13 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 5.5 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
             }
         }
-        private void rStraight(ref double current, ref double Power, int[] Straight)
+        private void CheckStraight(ref double current, ref double power, int[] Straight)
         {
             if (current >= -1)
             {
@@ -1526,29 +1536,29 @@
                         if (op.Max() - 4 == op[j])
                         {
                             current = 4;
-                            Power = op.Max() + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 4 });
+                            power = op.Max() + current * 100;
+                            win.Add(new Type() { Power = power, Current = 4 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         }
                         else
                         {
                             current = 4;
-                            Power = op[j + 4] + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 4 });
+                            power = op[j + 4] + current * 100;
+                            win.Add(new Type() { Power = power, Current = 4 });
                             sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                         }
                     }
                     if (op[j] == 0 && op[j + 1] == 9 && op[j + 2] == 10 && op[j + 3] == 11 && op[j + 4] == 12)
                     {
                         current = 4;
-                        Power = 13 + current * 100;
-                        win.Add(new Type() { Power = Power, Current = 4 });
+                        power = 13 + current * 100;
+                        win.Add(new Type() { Power = power, Current = 4 });
                         sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
                 }
             }
         }
-        private void rThreeOfAKind(ref double current, ref double Power, int[] Straight)
+        private void CheckThreeOfAKind(ref double current, ref double power, int[] Straight)
         {
             if (current >= -1)
             {
@@ -1560,22 +1570,22 @@
                         if (fh.Max() / 4 == 0)
                         {
                             current = 3;
-                            Power = 13 * 3 + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 3 });
+                            power = 13 * 3 + current * 100;
+                            win.Add(new Type() { Power = power, Current = 3 });
                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                         }
                         else
                         {
                             current = 3;
-                            Power = fh[0] / 4 + fh[1] / 4 + fh[2] / 4 + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 3 });
+                            power = fh[0] / 4 + fh[1] / 4 + fh[2] / 4 + current * 100;
+                            win.Add(new Type() { Power = power, Current = 3 });
                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                         }
                     }
                 }
             }
         }
-        private void rTwoPair(ref double current, ref double Power)
+        private void CheckForTwoPair(ref double current, ref double power)
         {
             if (current >= -1)
             {
@@ -1601,22 +1611,22 @@
                                         if (Reserve[index] / 4 == 0)
                                         {
                                             current = 2;
-                                            Power = 13 * 4 + (Reserve[index + 1] / 4) * 2 + current * 100;
-                                            win.Add(new Type() { Power = Power, Current = 2 });
+                                            power = 13 * 4 + (Reserve[index + 1] / 4) * 2 + current * 100;
+                                            win.Add(new Type() { Power = power, Current = 2 });
                                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                         }
                                         if (Reserve[index + 1] / 4 == 0)
                                         {
                                             current = 2;
-                                            Power = 13 * 4 + (Reserve[index] / 4) * 2 + current * 100;
-                                            win.Add(new Type() { Power = Power, Current = 2 });
+                                            power = 13 * 4 + (Reserve[index] / 4) * 2 + current * 100;
+                                            win.Add(new Type() { Power = power, Current = 2 });
                                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                         }
                                         if (Reserve[index + 1] / 4 != 0 && Reserve[index] / 4 != 0)
                                         {
                                             current = 2;
-                                            Power = (Reserve[index] / 4) * 2 + (Reserve[index + 1] / 4) * 2 + current * 100;
-                                            win.Add(new Type() { Power = Power, Current = 2 });
+                                            power = (Reserve[index] / 4) * 2 + (Reserve[index + 1] / 4) * 2 + current * 100;
+                                            win.Add(new Type() { Power = power, Current = 2 });
                                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                         }
                                     }
@@ -1628,7 +1638,7 @@
                 }
             }
         }
-        private void rPairTwoPair(ref double current, ref double Power)
+        private void CheckForPairTwoPair(ref double current, ref double power)
         {
             if (current >= -1)
             {
@@ -1656,29 +1666,29 @@
                                         if (Reserve[index + 1] / 4 == 0)
                                         {
                                             current = 2;
-                                            Power = (Reserve[index] / 4) * 2 + 13 * 4 + current * 100;
-                                            win.Add(new Type() { Power = Power, Current = 2 });
+                                            power = (Reserve[index] / 4) * 2 + 13 * 4 + current * 100;
+                                            win.Add(new Type() { Power = power, Current = 2 });
                                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                         }
                                         if (Reserve[index] / 4 == 0)
                                         {
                                             current = 2;
-                                            Power = (Reserve[index + 1] / 4) * 2 + 13 * 4 + current * 100;
-                                            win.Add(new Type() { Power = Power, Current = 2 });
+                                            power = (Reserve[index + 1] / 4) * 2 + 13 * 4 + current * 100;
+                                            win.Add(new Type() { Power = power, Current = 2 });
                                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                         }
                                         if (Reserve[index + 1] / 4 != 0)
                                         {
                                             current = 2;
-                                            Power = (Reserve[tc] / 4) * 2 + (Reserve[index + 1] / 4) * 2 + current * 100;
-                                            win.Add(new Type() { Power = Power, Current = 2 });
+                                            power = (Reserve[tc] / 4) * 2 + (Reserve[index + 1] / 4) * 2 + current * 100;
+                                            win.Add(new Type() { Power = power, Current = 2 });
                                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                         }
                                         if (Reserve[index] / 4 != 0)
                                         {
                                             current = 2;
-                                            Power = (Reserve[tc] / 4) * 2 + (Reserve[index] / 4) * 2 + current * 100;
-                                            win.Add(new Type() { Power = Power, Current = 2 });
+                                            power = (Reserve[tc] / 4) * 2 + (Reserve[index] / 4) * 2 + current * 100;
+                                            win.Add(new Type() { Power = power, Current = 2 });
                                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                         }
                                     }
@@ -1693,15 +1703,15 @@
                                             if (Reserve[tc] / 4 == 0)
                                             {
                                                 current = 0;
-                                                Power = 13 + Reserve[index] / 4 + current * 100;
-                                                win.Add(new Type() { Power = Power, Current = 1 });
+                                                power = 13 + Reserve[index] / 4 + current * 100;
+                                                win.Add(new Type() { Power = power, Current = 1 });
                                                 sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                             }
                                             else
                                             {
                                                 current = 0;
-                                                Power = Reserve[tc] / 4 + Reserve[index] / 4 + current * 100;
-                                                win.Add(new Type() { Power = Power, Current = 1 });
+                                                power = Reserve[tc] / 4 + Reserve[index] / 4 + current * 100;
+                                                win.Add(new Type() { Power = power, Current = 1 });
                                                 sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                             }
                                         }
@@ -1710,15 +1720,15 @@
                                             if (Reserve[tc] / 4 == 0)
                                             {
                                                 current = 0;
-                                                Power = 13 + Reserve[index + 1] + current * 100;
-                                                win.Add(new Type() { Power = Power, Current = 1 });
+                                                power = 13 + Reserve[index + 1] + current * 100;
+                                                win.Add(new Type() { Power = power, Current = 1 });
                                                 sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                             }
                                             else
                                             {
                                                 current = 0;
-                                                Power = Reserve[tc] / 4 + Reserve[index + 1] / 4 + current * 100;
-                                                win.Add(new Type() { Power = Power, Current = 1 });
+                                                power = Reserve[tc] / 4 + Reserve[index + 1] / 4 + current * 100;
+                                                win.Add(new Type() { Power = power, Current = 1 });
                                                 sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                                             }
                                         }
@@ -1731,11 +1741,12 @@
                 }
             }
         }
-        private void rPairFromHand(ref double current, ref double Power)
+        private void CheckForPairFromHand(ref double current, ref double power)
         {
             if (current >= -1)
             {
                 bool msgbox = false;
+
                 if (Reserve[index] / 4 == Reserve[index + 1] / 4)
                 {
                     if (!msgbox)
@@ -1743,15 +1754,15 @@
                         if (Reserve[index] / 4 == 0)
                         {
                             current = 1;
-                            Power = 13 * 4 + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 1 });
+                            power = 13 * 4 + current * 100;
+                            win.Add(new Type() { Power = power, Current = 1 });
                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                         }
                         else
                         {
                             current = 1;
-                            Power = (Reserve[index + 1] / 4) * 4 + current * 100;
-                            win.Add(new Type() { Power = Power, Current = 1 });
+                            power = (Reserve[index + 1] / 4) * 4 + current * 100;
+                            win.Add(new Type() { Power = power, Current = 1 });
                             sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                         }
                     }
@@ -1766,15 +1777,15 @@
                             if (Reserve[index + 1] / 4 == 0)
                             {
                                 current = 1;
-                                Power = 13 * 4 + Reserve[index] / 4 + current * 100;
-                                win.Add(new Type() { Power = Power, Current = 1 });
+                                power = 13 * 4 + Reserve[index] / 4 + current * 100;
+                                win.Add(new Type() { Power = power, Current = 1 });
                                 sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                             }
                             else
                             {
                                 current = 1;
-                                Power = (Reserve[index + 1] / 4) * 4 + Reserve[index] / 4 + current * 100;
-                                win.Add(new Type() { Power = Power, Current = 1 });
+                                power = (Reserve[index + 1] / 4) * 4 + Reserve[index] / 4 + current * 100;
+                                win.Add(new Type() { Power = power, Current = 1 });
                                 sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                             }
                         }
@@ -1787,15 +1798,15 @@
                             if (Reserve[index] / 4 == 0)
                             {
                                 current = 1;
-                                Power = 13 * 4 + Reserve[index + 1] / 4 + current * 100;
-                                win.Add(new Type() { Power = Power, Current = 1 });
+                                power = 13 * 4 + Reserve[index + 1] / 4 + current * 100;
+                                win.Add(new Type() { Power = power, Current = 1 });
                                 sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                             }
                             else
                             {
                                 current = 1;
-                                Power = (Reserve[tc] / 4) * 4 + Reserve[index + 1] / 4 + current * 100;
-                                win.Add(new Type() { Power = Power, Current = 1 });
+                                power = (Reserve[tc] / 4) * 4 + Reserve[index + 1] / 4 + current * 100;
+                                win.Add(new Type() { Power = power, Current = 1 });
                                 sorted = win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                             }
                         }
@@ -1804,35 +1815,35 @@
                 }
             }
         }
-        private void rHighCard(ref double current, ref double Power)
+        private void CheckForHighCard(ref double current, ref double power)
         {
             if (current == -1)
             {
                 if (Reserve[index] / 4 > Reserve[index + 1] / 4)
                 {
                     current = -1;
-                    Power = Reserve[index] / 4;
-                    win.Add(new Type() { Power = Power, Current = -1 });
+                    power = Reserve[index] / 4;
+                    win.Add(new Type() { Power = power, Current = -1 });
                     sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                 }
                 else
                 {
                     current = -1;
-                    Power = Reserve[index + 1] / 4;
-                    win.Add(new Type() { Power = Power, Current = -1 });
+                    power = Reserve[index + 1] / 4;
+                    win.Add(new Type() { Power = power, Current = -1 });
                     sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                 }
                 if (Reserve[index] / 4 == 0 || Reserve[index + 1] / 4 == 0)
                 {
                     current = -1;
-                    Power = 13;
-                    win.Add(new Type() { Power = Power, Current = -1 });
+                    power = 13;
+                    win.Add(new Type() { Power = power, Current = -1 });
                     sorted = win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                 }
             }
         }
 
-        void Winner(double current, double Power, string currentText, int chips, string lastly)
+        void Winner(double current, double power, string currentText, int chips, string lastly)
         {
             if (lastly == " ")
             {
@@ -1846,7 +1857,7 @@
             }
             if (current == sorted.Current)
             {
-                if (Power == sorted.Power)
+                if (power == sorted.Power)
                 {
                     winners++;
                     checkWinners.Add(currentText);
@@ -2143,7 +2154,7 @@
                 }
 
                 PlayerPanelVisibility();
-            
+
                 PlayerRaiseInitializing();
 
                 PlayerCallInitializing();
@@ -2157,7 +2168,7 @@
 
                 this.playerPower = 0; this.playerType = -1;
 
-               PlayersPowerInitializing();
+                PlayersPowerInitializing();
 
                 PlayersTypeInitializing();
 
@@ -2205,7 +2216,7 @@
             fifthBot.PlayerPanel.Visible = false;
         }
 
-        void FixCall(Label status, ref int cCall, ref int cRaise, int options)
+        void FixCall(Label status, ref int cardCall, ref int cardRaise, int options)
         {
             if (rounds != 4)
             {
@@ -2214,30 +2225,30 @@
                     if (status.Text.Contains("raise"))
                     {
                         var changeRaise = status.Text.Substring(6);
-                        cRaise = int.Parse(changeRaise);
+                        cardRaise = int.Parse(changeRaise);
                     }
                     if (status.Text.Contains("Call"))
                     {
                         var changeCall = status.Text.Substring(5);
-                        cCall = int.Parse(changeCall);
+                        cardCall = int.Parse(changeCall);
                     }
                     if (status.Text.Contains("Check"))
                     {
-                        cRaise = 0;
-                        cCall = 0;
+                        cardRaise = 0;
+                        cardCall = 0;
                     }
                 }
                 if (options == 2)
                 {
-                    if (cRaise != raise && cRaise <= raise)
+                    if (cardRaise != raise && cardRaise <= raise)
                     {
-                        call = Convert.ToInt32(raise) - cRaise;
+                        call = Convert.ToInt32(raise) - cardRaise;
                     }
-                    if (cCall != call || cCall <= call)
+                    if (cardCall != call || cardCall <= call)
                     {
-                        call = call - cCall;
+                        call = call - cardCall;
                     }
-                    if (cRaise == raise && raise > 0)
+                    if (cardRaise == raise && raise > 0)
                     {
                         call = 0;
                         buttonCall.Enabled = false;
@@ -2445,7 +2456,7 @@
             sorted.Power = 0;
 
             textBoxPot.Text = "0";
-            time = 60; up = 10000000; turnCount = 0;
+            timeRemaining = 60; up = 10000000; turnCount = 0;
             pStatus.Text = "";
             b1Status.Text = "";
             b2Status.Text = "";
@@ -2473,13 +2484,16 @@
                     buttonRaise.Text = "raise";
                 }
             }
+
             ImgLocation = Directory.GetFiles("Assets\\Cards", "*.png", SearchOption.TopDirectoryOnly);
+
             for (int os = 0; os < 17; os++)
             {
                 Holder[os].Image = null;
                 Holder[os].Invalidate();
                 Holder[os].Visible = false;
             }
+
             await Shuffle();
             //await Turns();
         }
@@ -3015,10 +3029,10 @@
                 playerFoldedTurn = true;
                 await Turns();
             }
-            if (time > 0)
+            if (timeRemaining > 0)
             {
-                time--;
-                pbTimer.Value = (time / 6) * 100;
+                timeRemaining--;
+                pbTimer.Value = (timeRemaining / 6) * 100;
             }
         }
         private void Update_Tick(object sender, object e)

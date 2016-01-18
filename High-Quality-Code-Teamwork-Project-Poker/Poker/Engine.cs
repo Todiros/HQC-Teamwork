@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Poker
 {
-    static class Program
+    static class Engine
     {
         /// <summary>
         /// The main entry point for the application.
