@@ -23,13 +23,11 @@
 
         private ProgressBar progressBar = new ProgressBar();
 
-        private List<bool?> bools = new List<bool?>();
-
+        private DataBase dataBase = new DataBase();
         private List<Type> win = new List<Type>();
-
-        private List<string> checkWinners = new List<string>();
-
-        private List<int> ints = new List<int>();
+        //private List<bool?> bools = new List<bool?>();
+        //private List<string> checkWinners = new List<string>();
+        //private List<int> ints = new List<int>();
 
         private bool playerFoldedTurn = false;
         private bool playerTurn = true;
@@ -131,7 +129,7 @@
             forthBot = new Player(playerChips, playerType, playerFolded, playerCall, playerRaise, playerPower);
             fifthBot = new Player(playerChips, playerType, playerFolded, playerCall, playerRaise, playerPower);
 
-            //bools.Add(playerFoldedTurn); bools.Add(firstBotFoldedTurn); bools.Add(secondBotFoldedTurn); bools.Add(thirdBotFoldedTurn); bools.Add(forthBotFoldedTurn); bools.Add(fifthBotFoldedTurn);
+            //dataBase.Add(playerFoldedTurn); dataBase.Add(firstBotFoldedTurn); dataBase.Add(secondBotFoldedTurn); dataBase.Add(thirdBotFoldedTurn); dataBase.Add(forthBotFoldedTurn); dataBase.Add(fifthBotFoldedTurn);
             call = bigBlind;
 
             MaximizeBox = false;
@@ -178,12 +176,12 @@
 
         async Task Shuffle()
         {
-            bools.Add(playerFoldedTurn);
-            bools.Add(firstBotFoldedTurn);
-            bools.Add(secondBotFoldedTurn);
-            bools.Add(thirdBotFoldedTurn);
-            bools.Add(forthBotFoldedTurn);
-            bools.Add(fifthBotFoldedTurn);
+            dataBase.AddBools(playerFoldedTurn);
+            dataBase.AddBools(firstBotFoldedTurn);
+            dataBase.AddBools(secondBotFoldedTurn);
+            dataBase.AddBools(thirdBotFoldedTurn);
+            dataBase.AddBools(forthBotFoldedTurn);
+            dataBase.AddBools(fifthBotFoldedTurn);
 
             buttonCall.Enabled = false;
             buttonRaise.Enabled = false;
@@ -609,8 +607,8 @@
                 {
                     if (buttonCall.Text.Contains("All in") == false || buttonRaise.Text.Contains("All in") == false)
                     {
-                        bools.RemoveAt(0);
-                        bools.Insert(0, null);
+                        dataBase.BoolsRemoveAt(0);
+                        dataBase.BoolsInsert(0, null);
                         maxLeft--;
                         playerFolded = true;
                     }
@@ -651,8 +649,8 @@
                 }
                 if (firstBotFoldedTurn && !firstBot.PlayerFolded)
                 {
-                    bools.RemoveAt(1);
-                    bools.Insert(1, null);
+                    dataBase.BoolsRemoveAt(1);
+                    dataBase.BoolsInsert(1, null);
                     maxLeft--;
                     firstBot.PlayerFolded = true;
                 }
@@ -684,8 +682,8 @@
                 }
                 if (secondBotFoldedTurn && !secondBot.PlayerFolded)
                 {
-                    bools.RemoveAt(2);
-                    bools.Insert(2, null);
+                    dataBase.BoolsRemoveAt(2);
+                    dataBase.BoolsInsert(2, null);
                     maxLeft--;
                     secondBot.PlayerFolded = true;
                 }
@@ -717,8 +715,8 @@
                 }
                 if (thirdBotFoldedTurn && !thirdBot.PlayerFolded)
                 {
-                    bools.RemoveAt(3);
-                    bools.Insert(3, null);
+                    dataBase.BoolsRemoveAt(3);
+                    dataBase.BoolsInsert(3, null);
                     maxLeft--;
                     thirdBot.PlayerFolded = true;
                 }
@@ -750,8 +748,8 @@
                 }
                 if (forthBotFoldedTurn && !forthBot.PlayerFolded)
                 {
-                    bools.RemoveAt(4);
-                    bools.Insert(4, null);
+                    dataBase.BoolsRemoveAt(4);
+                    dataBase.BoolsInsert(4, null);
                     maxLeft--;
                     forthBot.PlayerFolded = true;
                 }
@@ -782,8 +780,8 @@
                 }
                 if (fifthBotFoldedTurn && !fifthBot.PlayerFolded)
                 {
-                    bools.RemoveAt(5);
-                    bools.Insert(5, null);
+                    dataBase.BoolsRemoveAt(5);
+                    dataBase.BoolsInsert(5, null);
                     maxLeft--;
                     fifthBot.PlayerFolded = true;
                 }
@@ -796,8 +794,8 @@
                 {
                     if (buttonCall.Text.Contains("All in") == false || buttonRaise.Text.Contains("All in") == false)
                     {
-                        bools.RemoveAt(0);
-                        bools.Insert(0, null);
+                        dataBase.BoolsRemoveAt(0);
+                        dataBase.BoolsInsert(0, null);
                         maxLeft--;
                         playerFolded = true;
                     }
@@ -853,6 +851,7 @@
                 #endregion
 
                 const int CARDS_ON_TABLE = 16;
+
                 for (index = 0; index < CARDS_ON_TABLE; index++)
                 {
                     if (Reserve[index] == int.Parse(Holder[cardOne].Tag.ToString()) && Reserve[index + 1] == int.Parse(Holder[cardTwo].Tag.ToString()))
@@ -1860,7 +1859,7 @@
                 if (power == sorted.Power)
                 {
                     winners++;
-                    checkWinners.Add(currentText);
+                    dataBase.AddCheckedWinners(currentText);
                     if (current == -1)
                     {
                         MessageBox.Show(currentText + " High Card ");
@@ -1907,38 +1906,38 @@
             {
                 if (winners > 1)
                 {
-                    if (checkWinners.Contains("Player"))
+                    if (dataBase.Contains("Player"))
                     {
                         playerChips += int.Parse(textBoxPot.Text) / winners;
                         textBoxPlayerChips.Text = playerChips.ToString();
                         //playerPanel.Visible = true;
 
                     }
-                    if (checkWinners.Contains("Bot 1"))
+                    if (dataBase.Contains("Bot 1"))
                     {
                         firstBot.PlayerChips += int.Parse(textBoxPot.Text) / winners;
                         textBoxFirstBotChips.Text = firstBot.PlayerChips.ToString();
                         //b1Panel.Visible = true;
                     }
-                    if (checkWinners.Contains("Bot 2"))
+                    if (dataBase.Contains("Bot 2"))
                     {
                         secondBot.PlayerChips += int.Parse(textBoxPot.Text) / winners;
                         textBoxSecondBotChips.Text = secondBot.PlayerChips.ToString();
                         //b2Panel.Visible = true;
                     }
-                    if (checkWinners.Contains("Bot 3"))
+                    if (dataBase.Contains("Bot 3"))
                     {
                         thirdBot.PlayerChips += int.Parse(textBoxPot.Text) / winners;
                         textBoxThirdBotChips.Text = thirdBot.PlayerChips.ToString();
                         //b3Panel.Visible = true;
                     }
-                    if (checkWinners.Contains("Bot 4"))
+                    if (dataBase.Contains("Bot 4"))
                     {
                         forthBot.PlayerChips += int.Parse(textBoxPot.Text) / winners;
                         textBoxForthBotChips.Text = forthBot.PlayerChips.ToString();
                         //b4Panel.Visible = true;
                     }
-                    if (checkWinners.Contains("Bot 5"))
+                    if (dataBase.Contains("Bot 5"))
                     {
                         fifthBot.PlayerChips += int.Parse(textBoxPot.Text) / winners;
                         textBoxFifthBotChips.Text = fifthBot.PlayerChips.ToString();
@@ -1948,38 +1947,38 @@
                 }
                 if (winners == 1)
                 {
-                    if (checkWinners.Contains("Player"))
+                    if (dataBase.Contains("Player"))
                     {
                         playerChips += int.Parse(textBoxPot.Text);
                         //await Finish(1);
                         //playerPanel.Visible = true;
                     }
-                    if (checkWinners.Contains("Bot 1"))
+                    if (dataBase.Contains("Bot 1"))
                     {
                         firstBot.PlayerChips += int.Parse(textBoxPot.Text);
                         //await Finish(1);
                         //b1Panel.Visible = true;
                     }
-                    if (checkWinners.Contains("Bot 2"))
+                    if (dataBase.Contains("Bot 2"))
                     {
                         secondBot.PlayerChips += int.Parse(textBoxPot.Text);
                         //await Finish(1);
                         //b2Panel.Visible = true;
 
                     }
-                    if (checkWinners.Contains("Bot 3"))
+                    if (dataBase.Contains("Bot 3"))
                     {
                         thirdBot.PlayerChips += int.Parse(textBoxPot.Text);
                         //await Finish(1);
                         //b3Panel.Visible = true;
                     }
-                    if (checkWinners.Contains("Bot 4"))
+                    if (dataBase.Contains("Bot 4"))
                     {
                         forthBot.PlayerChips += int.Parse(textBoxPot.Text);
                         //await Finish(1);
                         //b4Panel.Visible = true;
                     }
-                    if (checkWinners.Contains("Bot 5"))
+                    if (dataBase.Contains("Bot 5"))
                     {
                         fifthBot.PlayerChips += int.Parse(textBoxPot.Text);
                         //await Finish(1);
@@ -2163,7 +2162,7 @@
                 call = bigBlind;
                 raise = 0;
                 ImgLocation = Directory.GetFiles("Assets\\Cards", "*.png", SearchOption.TopDirectoryOnly);
-                bools.Clear();
+                dataBase.ClearBools();
                 rounds = 0;
 
                 this.playerPower = 0; this.playerType = -1;
@@ -2172,8 +2171,8 @@
 
                 PlayersTypeInitializing();
 
-                ints.Clear();
-                checkWinners.Clear();
+                dataBase.ClearInts();
+                dataBase.ClearCheckedWinners();
                 winners = 0;
                 win.Clear();
                 sorted.Current = 0;
@@ -2264,12 +2263,12 @@
             {
                 if (playerStatus.Text.Contains("raise"))
                 {
-                    ints.Add(playerChips);
+                    dataBase.AddInts(playerChips);
                     intsAdded = true;
                 }
                 if (playerStatus.Text.Contains("Call"))
                 {
-                    ints.Add(playerChips);
+                    dataBase.AddInts(playerChips);
                     intsAdded = true;
                 }
             }
@@ -2279,7 +2278,7 @@
             {
                 if (!intsAdded)
                 {
-                    ints.Add(firstBot.PlayerChips);
+                    dataBase.AddInts(firstBot.PlayerChips);
                     intsAdded = true;
                 }
                 intsAdded = false;
@@ -2288,7 +2287,7 @@
             {
                 if (!intsAdded)
                 {
-                    ints.Add(secondBot.PlayerChips);
+                    dataBase.AddInts(secondBot.PlayerChips);
                     intsAdded = true;
                 }
                 intsAdded = false;
@@ -2297,7 +2296,7 @@
             {
                 if (!intsAdded)
                 {
-                    ints.Add(thirdBot.PlayerChips);
+                    dataBase.AddInts(thirdBot.PlayerChips);
                     intsAdded = true;
                 }
                 intsAdded = false;
@@ -2306,7 +2305,7 @@
             {
                 if (!intsAdded)
                 {
-                    ints.Add(forthBot.PlayerChips);
+                    dataBase.AddInts(forthBot.PlayerChips);
                     intsAdded = true;
                 }
                 intsAdded = false;
@@ -2315,26 +2314,27 @@
             {
                 if (!intsAdded)
                 {
-                    ints.Add(fifthBot.PlayerChips);
+                    dataBase.AddInts(fifthBot.PlayerChips);
                     intsAdded = true;
                 }
             }
-            if (ints.ToArray().Length == maxLeft)
+            if (dataBase.IntsLenght() == maxLeft)
             {
                 await Finish(2);
             }
             else
             {
-                ints.Clear();
+                dataBase.ClearInts();
             }
             #endregion
 
-            var abc = bools.Count(x => x == false);
+            var abc = dataBase.BoolsCount(x => x.Equals(false));
 
             #region LastManStanding
             if (abc == 1)
             {
-                int index = bools.IndexOf(false);
+                int index = dataBase.IndexOf(false);
+
                 if (index == 0)
                 {
                     playerChips += int.Parse(textBoxPot.Text);
@@ -2447,9 +2447,9 @@
 
             last = 123; raisedTurn = 1;
 
-            bools.Clear();
-            checkWinners.Clear();
-            ints.Clear();
+            dataBase.ClearBools();
+            dataBase.ClearCheckedWinners();
+            dataBase.ClearInts();
             win.Clear();
 
             sorted.Current = 0;
