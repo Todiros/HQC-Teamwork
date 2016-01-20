@@ -2,7 +2,7 @@
 {
     using System.Windows.Forms;
 
-    public class Player
+    public class Player : IPlayer
     {
         public Player(int playerChips, double playerType, bool playerFolded, int playerCall, int playerRaise, double playerPower)
         {
@@ -23,11 +23,11 @@
         public double PlayerType { get; set; }
 
         public bool PlayerFolded { get; set; }
-
+        
         public int PlayerCall { get; set; }
 
         public int PlayerRaise { get; set; }
-
+        
         public double PlayerPower { get; set; }
     }
 }

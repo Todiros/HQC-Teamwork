@@ -52,7 +52,9 @@
     <Compile Include="AddChips.Designer.cs">
       <DependentUpon>AddChips.cs</DependentUpon>
     </Compile>
-    <Compile Include="Engine.cs" />
+    <Compile Include="DataBase.cs" />
+    <Compile Include="IDataBase.cs" />
+    <Compile Include="IPlayer.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PokerTable.cs">
       <SubType>Form</SubType>
@@ -60,7 +62,7 @@
     <Compile Include="PokerTable.Designer.cs">
       <DependentUpon>PokerTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="ProgressBars.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Type.cs" />
