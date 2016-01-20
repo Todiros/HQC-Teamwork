@@ -2608,244 +2608,244 @@
             Winner(forthBot.PlayerType, forthBotPower, "Bot 4", forthBot.PlayerChips, fixedLast);
             Winner(fifthBot.PlayerType, fifthBotPower, "Bot 5", fifthBot.PlayerChips, fixedLast);
         }
-        void AI(int c1, int c2, ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower, double botCurrent)
+        void AI(int c1, int c2, ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, double botPower, double botCurrent)
         {
-            if (!sFTurn)
+            if (!isBotFinalTurn)
             {
                 if (botCurrent == -1)
                 {
-                    HighCard(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower);
+                    HighCard(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, botPower);
                 }
                 if (botCurrent == 0)
                 {
-                    PairTable(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower);
+                    PairTable(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, botPower);
                 }
                 if (botCurrent == 1)
                 {
-                    PairHand(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower);
+                    PairHand(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, botPower);
                 }
                 if (botCurrent == 2)
                 {
-                    TwoPair(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower);
+                    TwoPair(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, botPower);
                 }
                 if (botCurrent == 3)
                 {
-                    ThreeOfAKind(ref sChips, ref sTurn, ref sFTurn, sStatus, name, botPower);
+                    ThreeOfAKind(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, botPower);
                 }
                 if (botCurrent == 4)
                 {
-                    Straight(ref sChips, ref sTurn, ref sFTurn, sStatus, name, botPower);
+                    Straight(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, botPower);
                 }
                 if (botCurrent == 5 || botCurrent == 5.5)
                 {
-                    Flush(ref sChips, ref sTurn, ref sFTurn, sStatus, name, botPower);
+                    Flush(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, botPower);
                 }
                 if (botCurrent == 6)
                 {
-                    FullHouse(ref sChips, ref sTurn, ref sFTurn, sStatus, name, botPower);
+                    FullHouse(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, botPower);
                 }
                 if (botCurrent == 7)
                 {
-                    FourOfAKind(ref sChips, ref sTurn, ref sFTurn, sStatus, name, botPower);
+                    FourOfAKind(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, botPower);
                 }
                 if (botCurrent == 8 || botCurrent == 9)
                 {
-                    StraightFlush(ref sChips, ref sTurn, ref sFTurn, sStatus, name, botPower);
+                    StraightFlush(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, botPower);
                 }
             }
-            if (sFTurn)
+            if (isBotFinalTurn)
             {
                 Holder[c1].Visible = false;
                 Holder[c2].Visible = false;
             }
         }
-        private void HighCard(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
+        private void HighCard(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, double botPower)
         {
-            HP(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower, 20, 25);
+            HP(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, botPower, 20, 25);
         }
-        private void PairTable(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
+        private void PairTable(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, double botPower)
         {
-            HP(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower, 16, 25);
+            HP(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, botPower, 16, 25);
         }
-        private void PairHand(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
+        private void PairHand(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, double botPower)
         {
-            Random rPair = new Random();
-            int rCall = rPair.Next(10, 16);
-            int rRaise = rPair.Next(10, 13);
+            Random pairHand = new Random();
+            int pairHandCall = pairHand.Next(10, 16);
+            int pairHandRaise = pairHand.Next(10, 13);
             if (botPower <= 199 && botPower >= 140)
             {
-                PH(ref sChips, ref sTurn, ref sFTurn, sStatus, rCall, 6, rRaise);
+                PH(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, pairHandCall, 6, pairHandRaise);
             }
             if (botPower <= 139 && botPower >= 128)
             {
-                PH(ref sChips, ref sTurn, ref sFTurn, sStatus, rCall, 7, rRaise);
+                PH(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, pairHandCall, 7, pairHandRaise);
             }
             if (botPower < 128 && botPower >= 101)
             {
-                PH(ref sChips, ref sTurn, ref sFTurn, sStatus, rCall, 9, rRaise);
+                PH(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, rCall, 9, pairHandRaise);
             }
         }
-        private void TwoPair(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
+        private void TwoPair(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, double botPower)
         {
-            Random rPair = new Random();
-            int rCall = rPair.Next(6, 11);
-            int rRaise = rPair.Next(6, 11);
+            Random twoPair = new Random();
+            int twoPairCall = twoPair.Next(6, 11);
+            int twoPairRaise = twoPair.Next(6, 11);
             if (botPower <= 290 && botPower >= 246)
             {
-                PH(ref sChips, ref sTurn, ref sFTurn, sStatus, rCall, 3, rRaise);
+                PH(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, twoPairCall, 3, twoPairRaise);
             }
             if (botPower <= 244 && botPower >= 234)
             {
-                PH(ref sChips, ref sTurn, ref sFTurn, sStatus, rCall, 4, rRaise);
+                PH(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, twoPairCall, 4, twoPairRaise);
             }
             if (botPower < 234 && botPower >= 201)
             {
-                PH(ref sChips, ref sTurn, ref sFTurn, sStatus, rCall, 4, rRaise);
+                PH(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, twoPairCall, 4, twoPairRaise);
             }
         }
-        private void ThreeOfAKind(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
+        private void ThreeOfAKind(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, double botPower)
         {
-            Random tk = new Random();
-            int tCall = tk.Next(3, 7);
-            int tRaise = tk.Next(4, 8);
+            Random threeOfAKind = new Random();
+            int threeOfAKindCall = threeOfAKind.Next(3, 7);
+            int threeOfAKindRaise = threeOfAKind.Next(4, 8);
             if (botPower <= 390 && botPower >= 330)
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, tCall, tRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, threeOfAKindCall, threeOfAKindRaise);
             }
             if (botPower <= 327 && botPower >= 321)//10  8
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, tCall, tRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, threeOfAKindCall, threeOfAKindRaise);
             }
             if (botPower < 321 && botPower >= 303)//7 2
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, tCall, tRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, threeOfAKindCall, threeOfAKindRaise);
             }
         }
-        private void Straight(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
+        private void Straight(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, double botPower)
         {
-            Random str = new Random();
-            int sCall = str.Next(3, 6);
-            int sRaise = str.Next(3, 8);
+            Random straight = new Random();
+            int straightCall = straight.Next(3, 6);
+            int straightRaise = straight.Next(3, 8);
             if (botPower <= 480 && botPower >= 410)
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, sCall, sRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, straightCall, straightRaise);
             }
             if (botPower <= 409 && botPower >= 407)//10  8
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, sCall, sRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, straightCall, straightRaise);
             }
             if (botPower < 407 && botPower >= 404)
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, sCall, sRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, straightCall, straightRaise);
             }
         }
-        private void Flush(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
+        private void Flush(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, double botPower)
         {
-            Random fsh = new Random();
-            int fCall = fsh.Next(2, 6);
-            int fRaise = fsh.Next(3, 7);
-            Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, fCall, fRaise);
+            Random flush = new Random();
+            int flushCall = flush.Next(2, 6);
+            int flushRaise = flush.Next(3, 7);
+            Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, flushCall, flushRaise);
         }
-        private void FullHouse(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
+        private void FullHouse(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, double botPower)
         {
-            Random flh = new Random();
-            int fhCall = flh.Next(1, 5);
-            int fhRaise = flh.Next(2, 6);
+            Random fullHouse = new Random();
+            int fullHouseCall = fullHouse.Next(1, 5);
+            int fullHouseRaise = fullHouse.Next(2, 6);
             if (botPower <= 626 && botPower >= 620)
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, fhCall, fhRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, fullHouseCall, fullHouseRaise);
             }
             if (botPower < 620 && botPower >= 602)
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, fhCall, fhRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, fullHouseCall, fullHouseRaise);
             }
         }
-        private void FourOfAKind(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
+        private void FourOfAKind(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, double botPower)
         {
-            Random fk = new Random();
-            int fkCall = fk.Next(1, 4);
-            int fkRaise = fk.Next(2, 5);
+            Random fourOfAKind = new Random();
+            int fourOfAKindCall = fourOfAKind.Next(1, 4);
+            int fourOfAKindRaise = fourOfAKind.Next(2, 5);
             if (botPower <= 752 && botPower >= 704)
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, fkCall, fkRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, fourOfAKindCall, fourOfAKindRaise);
             }
         }
-        private void StraightFlush(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
+        private void StraightFlush(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, double botPower)
         {
-            Random sf = new Random();
-            int sfCall = sf.Next(1, 3);
-            int sfRaise = sf.Next(1, 3);
+            Random straightFlush = new Random();
+            int straightFlushCall = straightFlush.Next(1, 3);
+            int straightFlushRaise = straightFlush.Next(1, 3);
             if (botPower <= 913 && botPower >= 804)
             {
-                Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, sfCall, sfRaise);
+                Smooth(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, name, straightFlushCall, straightFlushRaise);
             }
         }
 
-        private void Fold(ref bool sTurn, ref bool sFTurn, Label sStatus)
+        private void Fold(ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel)
         {
             raising = false;
-            sStatus.Text = "Fold";
-            sTurn = false;
-            sFTurn = true;
+            statusLabel.Text = "Fold";
+            isBotTurn = false;
+            isBotFinalTurn = true;
         }
-        private void Check(ref bool cTurn, Label cStatus)
+        private void Check(ref bool isBotTurn, Label botStatus)
         {
-            cStatus.Text = "Check";
-            cTurn = false;
+            botStatus.Text = "Check";
+            isBotTurn = false;
             raising = false;
         }
-        private void Call(ref int sChips, ref bool sTurn, Label sStatus)
+        private void Call(ref int botChips, ref bool isBotTurn, Label statusLabel)
         {
             raising = false;
-            sTurn = false;
-            sChips -= call;
-            sStatus.Text = "Call " + call;
+            isBotTurn = false;
+            botChips -= call;
+            statusLabel.Text = "Call " + call;
             textBoxPot.Text = (int.Parse(textBoxPot.Text) + call).ToString();
         }
-        private void Raised(ref int sChips, ref bool sTurn, Label sStatus)
+        private void Raised(ref int botChips, ref bool isBotTurn, Label statusLabel)
         {
-            sChips -= Convert.ToInt32(raise);
-            sStatus.Text = "raise " + raise;
+            botChips -= Convert.ToInt32(raise);
+            statusLabel.Text = "raise " + raise;
             textBoxPot.Text = (int.Parse(textBoxPot.Text) + Convert.ToInt32(raise)).ToString();
             call = Convert.ToInt32(raise);
             raising = true;
-            sTurn = false;
+            isBotTurn = false;
         }
-        private static double RoundN(int sChips, int n)
+        private static double RoundN(int botChips, int n)
         {
-            double a = Math.Round((sChips / n) / 100d, 0) * 100;
+            double a = Math.Round((botChips / n) / 100d, 0) * 100;
             return a;
         }
-        private void HP(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower, int n, int n1)
+        private void HP(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, double botPower, int n, int n1)
         {
             Random rand = new Random();
             int rnd = rand.Next(1, 4);
             if (call <= 0)
             {
-                Check(ref sTurn, sStatus);
+                Check(ref isBotTurn, statusLabel);
             }
             if (call > 0)
             {
                 if (rnd == 1)
                 {
-                    if (call <= RoundN(sChips, n))
+                    if (call <= RoundN(botChips, n))
                     {
-                        Call(ref sChips, ref sTurn, sStatus);
+                        Call(ref botChips, ref isBotTurn, statusLabel);
                     }
                     else
                     {
-                        Fold(ref sTurn, ref sFTurn, sStatus);
+                        Fold(ref isBotTurn, ref isBotFinalTurn, statusLabel);
                     }
                 }
                 if (rnd == 2)
                 {
-                    if (call <= RoundN(sChips, n1))
+                    if (call <= RoundN(botChips, n1))
                     {
-                        Call(ref sChips, ref sTurn, sStatus);
+                        Call(ref botChips, ref isBotTurn, statusLabel);
                     }
                     else
                     {
-                        Fold(ref sTurn, ref sFTurn, sStatus);
+                        Fold(ref isBotTurn, ref isBotFinalTurn, statusLabel);
                     }
                 }
             }
@@ -2854,27 +2854,27 @@
                 if (raise == 0)
                 {
                     raise = call * 2;
-                    Raised(ref sChips, ref sTurn, sStatus);
+                    Raised(ref botChips, ref isBotTurn, statusLabel);
                 }
                 else
                 {
-                    if (raise <= RoundN(sChips, n))
+                    if (raise <= RoundN(botChips, n))
                     {
                         raise = call * 2;
-                        Raised(ref sChips, ref sTurn, sStatus);
+                        Raised(ref botChips, ref isBotTurn, statusLabel);
                     }
                     else
                     {
-                        Fold(ref sTurn, ref sFTurn, sStatus);
+                        Fold(ref isBotTurn, ref isBotFinalTurn, statusLabel);
                     }
                 }
             }
-            if (sChips <= 0)
+            if (botChips <= 0)
             {
-                sFTurn = true;
+                isBotFinalTurn = true;
             }
         }
-        private void PH(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int n, int n1, int r)
+        private void PH(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int n, int n1, int r)
         {
             Random rand = new Random();
             int rnd = rand.Next(1, 3);
@@ -2882,39 +2882,39 @@
             {
                 if (call <= 0)
                 {
-                    Check(ref sTurn, sStatus);
+                    Check(ref isBotTurn, statusLabel);
                 }
                 if (call > 0)
                 {
-                    if (call >= RoundN(sChips, n1))
+                    if (call >= RoundN(botChips, n1))
                     {
-                        Fold(ref sTurn, ref sFTurn, sStatus);
+                        Fold(ref isBotTurn, ref isBotFinalTurn, statusLabel);
                     }
-                    if (raise > RoundN(sChips, n))
+                    if (raise > RoundN(botChips, n))
                     {
-                        Fold(ref sTurn, ref sFTurn, sStatus);
+                        Fold(ref isBotTurn, ref isBotFinalTurn, statusLabel);
                     }
-                    if (!sFTurn)
+                    if (!isBotFinalTurn)
                     {
-                        if (call >= RoundN(sChips, n) && call <= RoundN(sChips, n1))
+                        if (call >= RoundN(botChips, n) && call <= RoundN(botChips, n1))
                         {
-                            Call(ref sChips, ref sTurn, sStatus);
+                            Call(ref botChips, ref isBotTurn, statusLabel);
                         }
-                        if (raise <= RoundN(sChips, n) && raise >= (RoundN(sChips, n)) / 2)
+                        if (raise <= RoundN(botChips, n) && raise >= (RoundN(botChips, n)) / 2)
                         {
-                            Call(ref sChips, ref sTurn, sStatus);
+                            Call(ref botChips, ref isBotTurn, statusLabel);
                         }
-                        if (raise <= (RoundN(sChips, n)) / 2)
+                        if (raise <= (RoundN(botChips, n)) / 2)
                         {
                             if (raise > 0)
                             {
-                                raise = RoundN(sChips, n);
-                                Raised(ref sChips, ref sTurn, sStatus);
+                                raise = RoundN(botChips, n);
+                                Raised(ref botChips, ref isBotTurn, statusLabel);
                             }
                             else
                             {
                                 raise = call * 2;
-                                Raised(ref sChips, ref sTurn, sStatus);
+                                Raised(ref botChips, ref isBotTurn, statusLabel);
                             }
                         }
 
@@ -2925,57 +2925,58 @@
             {
                 if (call > 0)
                 {
-                    if (call >= RoundN(sChips, n1 - rnd))
+                    if (call >= RoundN(botChips, n1 - rnd))
                     {
-                        Fold(ref sTurn, ref sFTurn, sStatus);
+                        Fold(ref isBotTurn, ref isBotFinalTurn, statusLabel);
                     }
-                    if (raise > RoundN(sChips, n - rnd))
+                    if (raise > RoundN(botChips, n - rnd))
                     {
-                        Fold(ref sTurn, ref sFTurn, sStatus);
+                        Fold(ref isBotTurn, ref isBotFinalTurn, statusLabel);
                     }
-                    if (!sFTurn)
+                    if (!isBotFinalTurn)
                     {
-                        if (call >= RoundN(sChips, n - rnd) && call <= RoundN(sChips, n1 - rnd))
+                        if (call >= RoundN(botChips, n - rnd) && call <= RoundN(botChips, n1 - rnd))
                         {
-                            Call(ref sChips, ref sTurn, sStatus);
+                            Call(ref botChips, ref isBotTurn, statusLabel);
                         }
-                        if (raise <= RoundN(sChips, n - rnd) && raise >= (RoundN(sChips, n - rnd)) / 2)
+                        if (raise <= RoundN(botChips, n - rnd) && raise >= (RoundN(botChips, n - rnd)) / 2)
                         {
-                            Call(ref sChips, ref sTurn, sStatus);
+                            Call(ref botChips, ref isBotTurn, statusLabel);
                         }
-                        if (raise <= (RoundN(sChips, n - rnd)) / 2)
+                        if (raise <= (RoundN(botChips, n - rnd)) / 2)
                         {
                             if (raise > 0)
                             {
-                                raise = RoundN(sChips, n - rnd);
-                                Raised(ref sChips, ref sTurn, sStatus);
+                                raise = RoundN(botChips, n - rnd);
+                                Raised(ref botChips, ref isBotTurn, statusLabel);
                             }
                             else
                             {
                                 raise = call * 2;
-                                Raised(ref sChips, ref sTurn, sStatus);
+                                Raised(ref botChips, ref isBotTurn, statusLabel);
                             }
                         }
                     }
                 }
                 if (call <= 0)
                 {
-                    raise = RoundN(sChips, r - rnd);
-                    Raised(ref sChips, ref sTurn, sStatus);
+                    raise = RoundN(botChips, r - rnd);
+                    Raised(ref botChips, ref isBotTurn, statusLabel);
                 }
             }
-            if (sChips <= 0)
+            if (botChips <= 0)
             {
-                sFTurn = true;
+                isBotFinalTurn = true;
             }
         }
-        void Smooth(ref int botChips, ref bool botTurn, ref bool botFTurn, Label botStatus, int name, int n, int r)
+        void Smooth(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, int n, int r)
         {
             Random rand = new Random();
             int rnd = rand.Next(1, 3);
+
             if (call <= 0)
             {
-                Check(ref botTurn, botStatus);
+                Check(ref isBotTurn, statusLabel);
             }
             else
             {
@@ -2983,14 +2984,14 @@
                 {
                     if (botChips > call)
                     {
-                        Call(ref botChips, ref botTurn, botStatus);
+                        Call(ref botChips, ref isBotTurn, statusLabel);
                     }
                     else if (botChips <= call)
                     {
                         raising = false;
-                        botTurn = false;
+                        isBotTurn = false;
                         botChips = 0;
-                        botStatus.Text = "Call " + botChips;
+                        statusLabel.Text = "Call " + botChips;
                         textBoxPot.Text = (int.Parse(textBoxPot.Text) + botChips).ToString();
                     }
                 }
@@ -3001,23 +3002,23 @@
                         if (botChips >= raise * 2)
                         {
                             raise *= 2;
-                            Raised(ref botChips, ref botTurn, botStatus);
+                            Raised(ref botChips, ref isBotTurn, statusLabel);
                         }
                         else
                         {
-                            Call(ref botChips, ref botTurn, botStatus);
+                            Call(ref botChips, ref isBotTurn, statusLabel);
                         }
                     }
                     else
                     {
                         raise = call * 2;
-                        Raised(ref botChips, ref botTurn, botStatus);
+                        Raised(ref botChips, ref isBotTurn, statusLabel);
                     }
                 }
             }
             if (botChips <= 0)
             {
-                botFTurn = true;
+                isBotFinalTurn = true;
             }
         }
 
