@@ -2136,14 +2136,14 @@
                 {
                     AddChips f2 = new AddChips();
                     f2.ShowDialog();
-                    if (f2.a != 0)
+                    if (f2.chipsQuantity != 0)
                     {
-                        playerChips = f2.a;
-                        firstBot.PlayerChips += f2.a;
-                        secondBot.PlayerChips += f2.a;
-                        thirdBot.PlayerChips += f2.a;
-                        forthBot.PlayerChips += f2.a;
-                        fifthBot.PlayerChips += f2.a;
+                        playerChips = f2.chipsQuantity;
+                        firstBot.PlayerChips += f2.chipsQuantity;
+                        secondBot.PlayerChips += f2.chipsQuantity;
+                        thirdBot.PlayerChips += f2.chipsQuantity;
+                        forthBot.PlayerChips += f2.chipsQuantity;
+                        fifthBot.PlayerChips += f2.chipsQuantity;
                         playerFoldedTurn = false;
                         playerTurn = true;
                         buttonRaise.Enabled = true;
@@ -2468,14 +2468,14 @@
             {
                 AddChips f2 = new AddChips();
                 f2.ShowDialog();
-                if (f2.a != 0)
+                if (f2.chipsQuantity != 0)
                 {
-                    playerChips = f2.a;
-                    firstBot.PlayerChips += f2.a;
-                    secondBot.PlayerChips += f2.a;
-                    thirdBot.PlayerChips += f2.a;
-                    forthBot.PlayerChips += f2.a;
-                    fifthBot.PlayerChips += f2.a;
+                    playerChips = f2.chipsQuantity;
+                    firstBot.PlayerChips += f2.chipsQuantity;
+                    secondBot.PlayerChips += f2.chipsQuantity;
+                    thirdBot.PlayerChips += f2.chipsQuantity;
+                    forthBot.PlayerChips += f2.chipsQuantity;
+                    fifthBot.PlayerChips += f2.chipsQuantity;
                     playerFoldedTurn = false;
                     playerTurn = true;
                     buttonRaise.Enabled = true;
@@ -2682,7 +2682,7 @@
             }
             if (botPower < 128 && botPower >= 101)
             {
-                PH(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, rCall, 9, pairHandRaise);
+                PH(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, pairHandCall, 9, pairHandRaise);
             }
         }
         private void TwoPair(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, double botPower)
