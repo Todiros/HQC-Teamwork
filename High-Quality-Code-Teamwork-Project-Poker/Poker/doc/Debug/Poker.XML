@@ -26,6 +26,14 @@
             Making the players panel not visible 
             </summary>
         </member>
+        <member name="M:Poker.PokerTable.timer_Tick(System.Object,System.Object)">
+            <summary>
+            UserInterface methods
+            </summary>
+            <param name="sender">unknown</param>
+            <param name="e">unknown</param>
+            <remarks>Depends on 'playerFoldedTurn', ''</remarks>
+        </member>
         <member name="F:Poker.PokerTable.components">
             <summary>
             Required designer variable.

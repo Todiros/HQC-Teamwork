@@ -561,7 +561,7 @@ namespace Poker
                 buttonRaise.Enabled = true;
                 buttonFold.Enabled = true;
             }
-        } // TODO
+        } 
         async Task Turns()
         {
             #region Rotating
@@ -3029,8 +3029,15 @@ namespace Poker
             }
         }
 
-        #region UserInterface
+        /// <summary>
+        /// UserInterface methods
+        /// </summary>
+        /// <param name="sender">unknown</param>
+        /// <param name="e">unknown</param>
+        /// <remarks>Depends on 'playerFoldedTurn', ''</remarks>
         // Have to make class UserInterface
+        #region UserInterface
+        // Dependant on 'playerFoldedTurn', 'timeRemaining', 'Turns()'
         private async void timer_Tick(object sender, object e)
         {
             if (pbTimer.Value <= 0)
@@ -3044,6 +3051,7 @@ namespace Poker
                 pbTimer.Value = (timeRemaining / 6) * 100;
             }
         }
+        // Dependant on 'playerChips', 'up', 'call', Player objects
         private void Update_Tick(object sender, object e)
         {
             if (playerChips <= 0)
@@ -3132,6 +3140,7 @@ namespace Poker
                 buttonRaise.Enabled = false;
             }
         }
+        // Dependant on 'playerTurn' and 'Turns()' 
         private async void BotFold_Click(object sender, EventArgs e)
         {
             playerStatus.Text = "Fold";
@@ -3139,6 +3148,7 @@ namespace Poker
             playerFoldedTurn = true;
             await Turns();
         }
+        // Dependant on 'playerTurn', 'call' and 'Turns()' 
         private async void BotCheck_Click(object sender, EventArgs e)
         {
             if (call <= 0)
@@ -3154,6 +3164,7 @@ namespace Poker
             }
             await Turns();
         }
+        // Dependant on 'playerChips', 'call', 'playerTurn', 'playerCall', 'Rules()', 'Turns()' 
         private async void BotCall_Click(object sender, EventArgs e)
         {
             Rules(0, 1, "Player", ref playerType, ref playerPower, playerFoldedTurn);
@@ -3186,6 +3197,7 @@ namespace Poker
             }
             await Turns();
         }
+        // Dependant on 'playerChips', 'call', 'raise', 'raising', 'last', 'playerRaise', 'Rules()', 'Turns()' 
         private async void BotRaise_Click(object sender, EventArgs e)
         {
             Rules(0, 1, "Player", ref playerType, ref playerPower, playerFoldedTurn);
@@ -3237,6 +3249,7 @@ namespace Poker
             playerTurn = false;
             await Turns();
         }
+        // Dependant on 'playerChips' and Player objects
         private void BotAdd_Click(object sender, EventArgs e)
         {
             if (textBoxAdd.Text == "") { }
@@ -3251,6 +3264,7 @@ namespace Poker
             }
             textBoxPlayerChips.Text = "playerChips : " + playerChips.ToString();
         }
+        // Dependant on 'bigBlind' and 'smallBlind'
         private void BotOptions_Click(object sender, EventArgs e)
         {
             textBoxBigBlind.Text = bigBlind.ToString();
@@ -3271,6 +3285,7 @@ namespace Poker
                 buttonSmallBlind.Visible = false;
             }
         }
+        // Dependant on 'smallBlind'
         private void BotSmallBlind_Click(object sender, EventArgs e)
         {
             int parsedValue;
@@ -3301,6 +3316,7 @@ namespace Poker
                 MessageBox.Show("The changes have been saved ! They will become available the next hand you play. ");
             }
         }
+        // Dependant on 'bigBlind'
         private void BotBigBlind_Click(object sender, EventArgs e)
         {
             int parsedValue;
@@ -3332,6 +3348,7 @@ namespace Poker
                 MessageBox.Show("The changes have been saved ! They will become available the next hand you play. ");
             }
         }
+        // Dependant on 'width' and 'height'
         private void Layout_Change(object sender, LayoutEventArgs e)
         {
             width = this.Width;
