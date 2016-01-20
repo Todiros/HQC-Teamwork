@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Collections.Generic;
 
-    public class DataBase
+    public class DataBase : IDataBase
     {
         private readonly IList<bool?> bools = new List<bool?>();
         private readonly List<string> checkedWinners = new List<string>();
