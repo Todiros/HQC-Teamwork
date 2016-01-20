@@ -1,4 +1,7 @@
-﻿namespace Poker
+﻿// TODO means the method is staying in this class for further research and most likely require Player objects
+// To separate class - they depend on each other and need to be in one class with the dependant methods
+
+namespace Poker
 {
     using System;
     using System.Collections.Generic;
@@ -24,7 +27,7 @@
         private ProgressBar progressBar = new ProgressBar();
 
         private DataBase dataBase = new DataBase();
-        private List<Type> win = new List<Type>();
+        private List<Type> win = new List<Type>(); // To separate class
         //private List<bool?> bools = new List<bool?>();
         //private List<string> checkWinners = new List<string>();
         //private List<int> ints = new List<int>();
@@ -32,10 +35,10 @@
         private bool playerFoldedTurn = false;
         private bool playerTurn = true;
         private bool restart = false;
-        private bool raising = false;
+        private bool raising = false; // To separate class
 
         //private int Nm; // never used, but commented just in case
-        private int call = 500;
+        private int call = 500; // To separate class
         private int foldedPlayers = 5;
 
         private Panel playerPanel = new Panel();
@@ -48,8 +51,8 @@
         private double playerPower = 0;
 
         private double type;
-        private double rounds = 0;
-        private double raise = 0;
+        private double rounds = 0; // To separate class
+        private double raise = 0; // To separate class
 
         private bool firstBotTurn = false;
         private bool secondBotTurn = false;
@@ -79,47 +82,29 @@
         private int last = 123;
         private int raisedTurn = 1;
 
-        Poker.Type sorted;
+        Poker.Type sorted; // TODO To separate class 
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        private void Form1_Load(object sender, EventArgs e) {}
 
         string[] ImgLocation = Directory.GetFiles("Assets\\Cards", "*.png", SearchOption.TopDirectoryOnly);
-        /*string[] ImgLocation ={
-                   "Assets\\Cards\\33.png","Assets\\Cards\\22.png",
-                    "Assets\\Cards\\29.png","Assets\\Cards\\21.png",
-                    "Assets\\Cards\\36.png","Assets\\Cards\\17.png",
-                    "Assets\\Cards\\40.png","Assets\\Cards\\16.png",
-                    "Assets\\Cards\\5.png","Assets\\Cards\\47.png",
-                    "Assets\\Cards\\37.png","Assets\\Cards\\13.png",
-                    
-                    "Assets\\Cards\\12.png",
-                    "Assets\\Cards\\8.png","Assets\\Cards\\18.png",
-                    "Assets\\Cards\\15.png","Assets\\Cards\\27.png"};*/
-        int[] Reserve = new int[CARDS_ON_THE_FIELD_COUNT];
+        int[] Reserve = new int[CARDS_ON_THE_FIELD_COUNT]; // To separate class
 
         Image[] Deck = new Image[ALL_CARDS_COUNT];
 
-        PictureBox[] Holder = new PictureBox[ALL_CARDS_COUNT];
+        PictureBox[] Holder = new PictureBox[ALL_CARDS_COUNT]; // To separate class
 
         Timer timer = new Timer();
         Timer updates = new Timer();
-
-        // variable 't' changed to 'time'
+        
         int timeRemaining = 60;
-        // variable 'i' changed to 'index'
         int index;
-        // variable 'bb' changed to 'bigBlind'
         int bigBlind = 500;
-        // variable 'sb' changed to smallBlind'
         int smallBlind = 250;
         // TODO: figure out what 'up' is. Its connected with 'time' somehow.
         int up = 10000000;
         int turnCount = 0;
         #endregion
-
+        // TODO
         public PokerTable()
         {
             player = new Player(playerChips, playerType, playerFolded, playerCall, playerRaise, playerPower);
@@ -129,7 +114,12 @@
             forthBot = new Player(playerChips, playerType, playerFolded, playerCall, playerRaise, playerPower);
             fifthBot = new Player(playerChips, playerType, playerFolded, playerCall, playerRaise, playerPower);
 
-            //dataBase.Add(playerFoldedTurn); dataBase.Add(firstBotFoldedTurn); dataBase.Add(secondBotFoldedTurn); dataBase.Add(thirdBotFoldedTurn); dataBase.Add(forthBotFoldedTurn); dataBase.Add(fifthBotFoldedTurn);
+            //dataBase.Add(playerFoldedTurn); 
+            //dataBase.Add(firstBotFoldedTurn); 
+            //dataBase.Add(secondBotFoldedTurn); 
+            //dataBase.Add(thirdBotFoldedTurn); 
+            //dataBase.Add(forthBotFoldedTurn); 
+            //dataBase.Add(fifthBotFoldedTurn);
             call = bigBlind;
 
             MaximizeBox = false;
@@ -174,6 +164,7 @@
             textBoxRaise.Text = (bigBlind * 2).ToString();
         }
 
+        //TODO
         async Task Shuffle()
         {
             dataBase.AddBools(playerFoldedTurn);
@@ -810,6 +801,7 @@
             }
         }
 
+        // Dependant on 'Reserve[]', 'Holder[]', 'rPairFromHand()', 'rPairTwoPair()', etc.
         void Rules(int cardOne, int cardTwo, string currentText, ref double cardsCurrentValue, ref double power, bool foldedTurn)
         {
             if (cardOne == 0 && cardTwo == 1)
@@ -899,6 +891,8 @@
                 }
             }
         }
+
+        // Dependant only on 'win' and 'sorted'
         private void CheckForStraightFlush(ref double current, ref double power, int[] st1, int[] st2, int[] st3, int[] st4)
         {
             if (current >= -1)
@@ -1842,6 +1836,7 @@
             }
         }
 
+        // TODO
         void Winner(double current, double power, string currentText, int chips, string lastly)
         {
             if (lastly == " ")
@@ -2193,7 +2188,6 @@
                 await Turns();
             }
         }
-
         private void PlayersTypeInitializing()
         {
             player.PlayerType = -1;
@@ -2204,7 +2198,10 @@
             fifthBot.PlayerType = -1;
         }
 
-        // Making the players panel not visible 
+        // TODO
+        /// <summary>
+        /// Making the players panel not visible 
+        /// </summary>
         private void PlayerPanelVisibility()
         {
             player.PlayerPanel.Visible = false;
@@ -2215,6 +2212,7 @@
             fifthBot.PlayerPanel.Visible = false;
         }
 
+        // Dependant on 'call', 'raise and 'rounds'
         void FixCall(Label status, ref int cardCall, ref int cardRaise, int options)
         {
             if (rounds != 4)
@@ -2256,6 +2254,8 @@
                 }
             }
         }
+
+        // TODO
         async Task AllIn()
         {
             #region All in
@@ -2498,6 +2498,7 @@
             //await Turns();
         }
 
+        // Variable setters
         private void PlayersPowerInitializing()
         {
             player.PlayerPower = 0;
@@ -2507,7 +2508,6 @@
             forthBot.PlayerPower = 0;
             fifthBot.PlayerPower = 0;
         }
-
         private void NotBotTurn()
         {
             firstBotTurn = false;
@@ -2516,7 +2516,6 @@
             forthBotTurn = false;
             fifthBotTurn = false;
         }
-
         private void PlayerNotFolded()
         {
             player.PlayerFolded = false;
@@ -2526,8 +2525,6 @@
             forthBot.PlayerFolded = false;
             fifthBot.PlayerFolded = false;
         }
-
-        //Initializing players call
         private void PlayerCallInitializing()
         {
             player.PlayerCall = 0;
@@ -2537,8 +2534,6 @@
             forthBot.PlayerCall = 0;
             fifthBot.PlayerCall = 0;
         }
-
-        //Initializing players raise
         private void PlayerRaiseInitializing()
         {
             player.PlayerRaise = 0;
@@ -2549,6 +2544,7 @@
             fifthBot.PlayerRaise = 0;
         }
 
+        // Dependant on 'win', 'sorted', 'pStatus', 'b1Status' ... 'b5Status', 'Rules()', 'Winner()'
         void FixWinners()
         {
             win.Clear();
@@ -2608,6 +2604,8 @@
             Winner(forthBot.PlayerType, forthBotPower, "Bot 4", forthBot.PlayerChips, fixedLast);
             Winner(fifthBot.PlayerType, fifthBotPower, "Bot 5", fifthBot.PlayerChips, fixedLast);
         }
+
+        // Dependant on 'Holder'
         void AI(int c1, int c2, ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, double botPower, double botCurrent)
         {
             if (!isBotFinalTurn)
@@ -2659,6 +2657,8 @@
                 Holder[c2].Visible = false;
             }
         }
+
+        // Dependant only on 'HP' and 'PH'
         private void HighCard(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, double botPower)
         {
             HP(ref botChips, ref isBotTurn, ref isBotFinalTurn, statusLabel, botPower, 20, 25);
@@ -2781,6 +2781,7 @@
             }
         }
 
+        // Dependant on 'raising', 'call' and 'textBoxPot'
         private void Fold(ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel)
         {
             raising = false;
@@ -2811,11 +2812,15 @@
             raising = true;
             isBotTurn = false;
         }
+
+        // Independant
         private static double RoundN(int botChips, int n)
         {
             double a = Math.Round((botChips / n) / 100d, 0) * 100;
             return a;
         }
+
+        // Dependant on 'call', 'raise', 'rounds' and 'RoundN()', 'Fold()', 'Check()', etc.
         private void HP(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, double botPower, int n, int n1)
         {
             Random rand = new Random();
@@ -2969,6 +2974,8 @@
                 isBotFinalTurn = true;
             }
         }
+   
+        // Dependant on 'call', 'raise', 'raising', 'TextBoxPot' and 'RoundN()', 'Fold()', 'Check()', etc.
         void Smooth(ref int botChips, ref bool isBotTurn, ref bool isBotFinalTurn, Label statusLabel, int name, int n, int r)
         {
             Random rand = new Random();
