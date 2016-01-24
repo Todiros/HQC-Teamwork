@@ -6,7 +6,7 @@
     {
         Panel PlayerPanel { get; set; }
 
-        int PlayerChips { get; set; }
+        int Chips { get; set; }
 
         double PlayerType { get; set; }
 
@@ -14,8 +14,8 @@
 
         int PlayerCall { get; set; }
 
-        int PlayerRaise { get; set; }
+        int Raise { get; set; }
 
-        double PlayerPower { get; set; }
+        double Power { get; set; }
     }
 }
