@@ -85,7 +85,10 @@ namespace Poker
 
         Type sorted; // TODO To separate class 
 
-        private void PokerTable_Load(object sender, EventArgs e) {}
+        private void PokerTable_Load(object sender, EventArgs e)
+        {
+            
+        }
 
         string[] ImgLocation = Directory.GetFiles("Assets\\Cards", "*.png", SearchOption.TopDirectoryOnly);
         int[] Reserve = new int[CARDS_ON_THE_FIELD_COUNT]; // To separate class
@@ -234,10 +237,7 @@ namespace Poker
                     horizontal += Holder[index].Width;
                     this.Controls.Add(player.PlayerPanel);
                     player.PlayerPanel.Location = new Point(Holder[0].Left - 10, Holder[0].Top - 10);
-                    player.PlayerPanel.BackColor = Color.DarkBlue;
-                    player.PlayerPanel.Height = 150;
-                    player.PlayerPanel.Width = 180;
-                    player.PlayerPanel.Visible = false;
+                    PlayerPanelInitialization(player);
                 }
 
                 if (firstBot.Chips > 0)
@@ -266,10 +266,7 @@ namespace Poker
                         Holder[index].Visible = true;
                         this.Controls.Add(firstBot.PlayerPanel);
                         firstBot.PlayerPanel.Location = new Point(Holder[2].Left - 10, Holder[2].Top - 10);
-                        firstBot.PlayerPanel.BackColor = Color.DarkBlue;
-                        firstBot.PlayerPanel.Height = 150;
-                        firstBot.PlayerPanel.Width = 180;
-                        firstBot.PlayerPanel.Visible = false;
+                        PlayerPanelInitialization(firstBot);
 
                         if (index == 3)
                         {
@@ -301,10 +298,7 @@ namespace Poker
                         Holder[index].Visible = true;
                         this.Controls.Add(secondBot.PlayerPanel);
                         secondBot.PlayerPanel.Location = new Point(Holder[4].Left - 10, Holder[4].Top - 10);
-                        secondBot.PlayerPanel.BackColor = Color.DarkBlue;
-                        secondBot.PlayerPanel.Height = 150;
-                        secondBot.PlayerPanel.Width = 180;
-                        secondBot.PlayerPanel.Visible = false;
+                        PlayerPanelInitialization(secondBot);
                         if (index == 5)
                         {
                             check = false;
@@ -335,10 +329,7 @@ namespace Poker
                         Holder[index].Visible = true;
                         this.Controls.Add(thirdBot.PlayerPanel);
                         thirdBot.PlayerPanel.Location = new Point(Holder[6].Left - 10, Holder[6].Top - 10);
-                        thirdBot.PlayerPanel.BackColor = Color.DarkBlue;
-                        thirdBot.PlayerPanel.Height = 150;
-                        thirdBot.PlayerPanel.Width = 180;
-                        thirdBot.PlayerPanel.Visible = false;
+                        PlayerPanelInitialization(thirdBot);
                         if (index == 7)
                         {
                             check = false;
@@ -369,10 +360,7 @@ namespace Poker
                         Holder[index].Visible = true;
                         this.Controls.Add(forthBot.PlayerPanel);
                         forthBot.PlayerPanel.Location = new Point(Holder[8].Left - 10, Holder[8].Top - 10);
-                        forthBot.PlayerPanel.BackColor = Color.DarkBlue;
-                        forthBot.PlayerPanel.Height = 150;
-                        forthBot.PlayerPanel.Width = 180;
-                        forthBot.PlayerPanel.Visible = false;
+                        PlayerPanelInitialization(forthBot);
                         if (index == 9)
                         {
                             check = false;
@@ -403,10 +391,7 @@ namespace Poker
                         Holder[index].Visible = true;
                         this.Controls.Add(fifthBot.PlayerPanel);
                         fifthBot.PlayerPanel.Location = new Point(Holder[10].Left - 10, Holder[10].Top - 10);
-                        fifthBot.PlayerPanel.BackColor = Color.DarkBlue;
-                        fifthBot.PlayerPanel.Height = 150;
-                        fifthBot.PlayerPanel.Width = 180;
-                        fifthBot.PlayerPanel.Visible = false;
+                        PlayerPanelInitialization(fifthBot);
                         if (index == 11)
                         {
                             check = false;
@@ -564,7 +549,16 @@ namespace Poker
                 buttonRaise.Enabled = true;
                 buttonFold.Enabled = true;
             }
-        } 
+        }
+        //Player Panel Initialization
+        private void PlayerPanelInitialization(Player player)
+        {
+            player.PlayerPanel.BackColor = Color.DarkBlue;
+            player.PlayerPanel.Height = 150;
+            player.PlayerPanel.Width = 180;
+            player.PlayerPanel.Visible = false;
+        }
+
         async Task Turns()
         {
             #region Rotating
